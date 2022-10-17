@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#353531">
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="15dp"
+        android:paddingTop="40dp"
+        android:paddingBottom="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="25dp"
+            android:text="Create  account"
+            android:textColor="#FBFBFF"
+            android:textSize="25sp" />
+
+        <EditText
+            android:id="@+id/etSEmailAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="15dp"
+            android:autofillHints="emailAddress"
+            android:ems="10"
+            android:hint="E-mail address"
+            android:textColor="#FBFBFF"
+            android:inputType="textEmailAddress"
+            android:minHeight="48dp"
+            android:textColorHint="@color/whiteTransparent" />
+
+        <EditText
+            android:id="@+id/etSPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:autofillHints="password"
+            android:ems="10"
+            android:hint="Password"
+            android:textColor="#FBFBFF"
+            android:inputType="textPassword"
+            android:minHeight="48dp"
+            android:textColorHint="@color/whiteTransparent" />
+
+        <EditText
+            android:id="@+id/etSConfPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:ems="10"
+            android:hint="Confirm password"
+            android:textColor="#FBFBFF"
+            android:inputType="textPassword"
+            android:minHeight="48dp"
+            android:textColorHint="@color/whiteTransparent"
+            tools:ignore="TextContrastCheck" />
+
+        <Button
+            android:id="@+id/btnSSigned"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:background="#01BAEF"
+            android:text="Sign up"
+            tools:ignore="TextContrastCheck" />
+
+        <TextView
+            android:id="@+id/tvRedirectLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_margin="10dp"
+            android:text="Already have an account? Login"
+            android:textColor="#FBFBFF"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
