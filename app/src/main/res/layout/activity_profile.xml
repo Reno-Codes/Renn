@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:padding="20dp"
     android:layout_gravity="center"
+    android:background="#353531"
     tools:context=".ProfileActivity">
 
 
@@ -15,12 +16,24 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Get notifications for jobs"
+        android:text="@string/get_notifications_for_jobs"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="#FBFBFF"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.switchmaterial.SwitchMaterial
+        android:id="@+id/switchWork"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:minHeight="48dp"
+        android:text="@string/enable_work"
+        android:textColor="#FBFBFF"
+        app:layout_constraintStart_toStartOf="@id/switchHome"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switchHome"
@@ -28,10 +41,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:minHeight="48dp"
-        android:text="Home and Garden"
+        android:text="@string/home_and_garden"
+        android:textColor="#FBFBFF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/switchWork"
+        android:visibility="invisible"/>
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/switchTaxi"
@@ -39,7 +54,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:minHeight="48dp"
-        android:text="Taxi"
+        android:text="@string/taxi"
+        android:textColor="#FBFBFF"
         app:layout_constraintStart_toStartOf="@+id/switchHome"
-        app:layout_constraintTop_toBottomOf="@+id/switchHome" />
+        app:layout_constraintTop_toBottomOf="@+id/switchHome"
+        android:visibility="invisible"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

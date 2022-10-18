@@ -12,7 +12,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.util.regex.Pattern
 
@@ -100,9 +99,11 @@ class SignupActivity : AppCompatActivity() {
                 Toast.makeText(this, "Successfully signed Up", Toast.LENGTH_SHORT).show()
                 database = FirebaseDatabase.getInstance().getReference("Users")
                 val userid= FirebaseAuth.getInstance().currentUser!!.uid
-                val user = User(email, userid, "OFF", "OFF", "off")
+                val user = User(email, userid, true)
+                val userCategories = Categories("OFF", "OFF") // TODO( Make categories Boolean instead of ON/OFF string )
                 database.child(userid).setValue(user).addOnSuccessListener {
                     Log.d("PushEmailToDB", "signUpUser: Saved to database!")
+                    database.child(userid).child("Categories").setValue(userCategories)
                 }.addOnFailureListener {
                     Log.d("PushEmailToDB", "signUpUser: Failed saving to database.")
                 }
