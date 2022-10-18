@@ -7,6 +7,6 @@ data class User(
 )
 
 data class Categories(
-    val homeCat: String? = null,
-    val taxiCat: String? = null
+    val homeCat: Boolean? = null,
+    val taxiCat: Boolean? = null
 )

@@ -12,8 +12,6 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.core.Tag
-import kotlin.math.log
 
 
 class MainActivity : AppCompatActivity() {
@@ -21,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
 
     private lateinit var captionTv: TextView
-    private lateinit var notificationBtn: Button
+    private lateinit var jobAlertBtn: Button
     private lateinit var jobEt: EditText
     private lateinit var sendJobBtn: Button
     private lateinit var btnSignOut: Button
@@ -32,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         captionTv = findViewById(R.id.captionTv)
-        notificationBtn = findViewById(R.id.notifitcationBtn)
+        jobAlertBtn = findViewById(R.id.jobAlertBtn)
         jobEt = findViewById(R.id.jobEt)
         sendJobBtn = findViewById(R.id.sendJobBtn)
         btnSignOut = findViewById(R.id.signOutBtn)
@@ -48,7 +46,7 @@ class MainActivity : AppCompatActivity() {
             finish()
         }
 
-        notificationBtn.setOnClickListener {
+        jobAlertBtn.setOnClickListener {
             val intent = Intent(this, ProfileActivity::class.java)
             startActivity(intent)
         }

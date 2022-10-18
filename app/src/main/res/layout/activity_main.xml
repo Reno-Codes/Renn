@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#353531">
@@ -22,7 +21,7 @@
             android:id="@+id/captionTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Welcome to our app"
+            android:text="@string/signed_in_as"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textColor="@color/white"
@@ -36,7 +35,7 @@
             style="@style/TextAppearance.MaterialComponents.Body2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="What do you need?"
+            android:hint="@string/what_do_you_need"
             android:textColorHint="@color/whiteTransparent"
             android:textColor="#FBFBFF"
             android:inputType="text"
@@ -50,18 +49,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Post"
+            android:text="@string/post"
             android:textAllCaps="true"
             style="@style/TextAppearance.MaterialComponents.Body2"
             android:textColor="@color/white"/>
 
     <Button
-        android:id="@+id/notifitcationBtn"
+        android:id="@+id/jobAlertBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="100dp"
-        android:text="Job Alerts"
+        android:text="@string/job_alerts"
         android:textAllCaps="true"
         style="@style/TextAppearance.MaterialComponents.Body2"
         android:textColor="@color/white"/>
@@ -71,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Sign out"
+        android:text="@string/sign_out"
         style="@style/TextAppearance.MaterialComponents.Body2"
         android:textColor="@color/white" />
 

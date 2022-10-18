@@ -8,4 +8,10 @@
     <string name="get_notifications_for_jobs">Get notifications for jobs</string>
     <string name="taxi">Taxi</string>
     <string name="enable_work">Enable Work</string>
+    <string name="disable_work">Disable Work</string>
+    <string name="sign_out">Sign out</string>
+    <string name="signed_in_as">Signed in as ...</string>
+    <string name="what_do_you_need">What do you need?</string>
+    <string name="post">Post</string>
+    <string name="job_alerts">Job Alerts</string>
 </resources>

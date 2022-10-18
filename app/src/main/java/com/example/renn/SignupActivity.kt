@@ -99,8 +99,8 @@ class SignupActivity : AppCompatActivity() {
                 Toast.makeText(this, "Successfully signed Up", Toast.LENGTH_SHORT).show()
                 database = FirebaseDatabase.getInstance().getReference("Users")
                 val userid= FirebaseAuth.getInstance().currentUser!!.uid
-                val user = User(email, userid, true)
-                val userCategories = Categories("OFF", "OFF") // TODO( Make categories Boolean instead of ON/OFF string )
+                val user = User(email = email, userid = userid, workEnabled = true)
+                val userCategories = Categories(homeCat = false, taxiCat = false)
                 database.child(userid).setValue(user).addOnSuccessListener {
                     Log.d("PushEmailToDB", "signUpUser: Saved to database!")
                     database.child(userid).child("Categories").setValue(userCategories)
