@@ -39,6 +39,7 @@ class LoginActivity : AppCompatActivity() {
         tvRedirectSignUp.setOnClickListener {
             val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_up,R.anim.slide_down)
             // using finish() to end the activity
             finish()
         }
@@ -59,6 +60,7 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
+                overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left)
                 // using finish() to end the current activity (activity_login)
                 finish()
             } else

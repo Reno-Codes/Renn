@@ -51,6 +51,7 @@ class SignupActivity : AppCompatActivity() {
         tvRedirectLogin.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_up,R.anim.slide_down)
         }
     }
 
@@ -99,7 +100,7 @@ class SignupActivity : AppCompatActivity() {
                 Toast.makeText(this, "Successfully signed Up", Toast.LENGTH_SHORT).show()
                 database = FirebaseDatabase.getInstance().getReference("Users")
                 val userid= FirebaseAuth.getInstance().currentUser!!.uid
-                val user = User(email = email, userid = userid, workEnabled = true)
+                val user = User(email = email, userid = userid, workEnabled = false)
                 val userCategories = Categories(homeCat = false, taxiCat = false)
                 database.child(userid).setValue(user).addOnSuccessListener {
                     Log.d("PushEmailToDB", "signUpUser: Saved to database!")
@@ -114,6 +115,7 @@ class SignupActivity : AppCompatActivity() {
                         Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
+                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left)
                         // using finish() to end the activity
                         finish()
 

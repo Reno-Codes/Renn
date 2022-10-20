@@ -10,7 +10,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
-class ProfileActivity : AppCompatActivity() {
+class SettingsActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private lateinit var homeSwitch: SwitchMaterial
     private lateinit var taxiSwitch: SwitchMaterial
@@ -19,7 +19,7 @@ class ProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_profile)
+        setContentView(R.layout.activity_settings)
 
         homeSwitch = findViewById(R.id.switchHome)
         taxiSwitch = findViewById(R.id.switchTaxi)
@@ -69,7 +69,8 @@ class ProfileActivity : AppCompatActivity() {
             if (homeSwitch.isChecked) {
                 database.child(userid).child("Categories").child("homeCat").setValue(true).addOnSuccessListener {
                     Log.d("UpdateHomeCat", "updateHomeCat: homeCat = true")
-                    database.child("HomeCategory").child(userid).setValue(userid)
+                    // Add user to category sorted table
+                    database.child("All_Categories").child("HomeCategory").child("Workers").child(userid).setValue(userid)
                 }.addOnFailureListener {
                     Log.d("UpdateHomeCat", "updateHomeCat: homeCat can't be updated")
                 }
@@ -77,7 +78,8 @@ class ProfileActivity : AppCompatActivity() {
             else{
                 database.child(userid).child("Categories").child("homeCat").setValue(false).addOnSuccessListener {
                     Log.d("UpdateHomeCat", "updateHomeCat: homeCat = false")
-                    database.child("HomeCategory").child(userid).setValue(null)
+                    // Remove user from category sorted table
+                    database.child("All_Categories").child("HomeCategory").child("Workers").child(userid).setValue(null)
                 }.addOnFailureListener {
                     Log.d("UpdateHomeCat", "updateHomeCat: homeCat can't be updated")
                 }
@@ -89,7 +91,8 @@ class ProfileActivity : AppCompatActivity() {
             if (taxiSwitch.isChecked) {
                 database.child(userid).child("Categories").child("taxiCat").setValue(true).addOnSuccessListener {
                     Log.d("updateTaxiCat", "updateTaxiCat: taxiCat = true")
-                    database.child("TaxiCategory").child(userid).setValue(userid)
+                    // Add user to category sorted table
+                    database.child("All_Categories").child("TaxiCategory").child("Workers").child(userid).setValue(userid)
                 }.addOnFailureListener {
                     Log.d("updateTaxiCat", "updateTaxiCat: taxiCat can't be updated")
                 }
@@ -97,7 +100,8 @@ class ProfileActivity : AppCompatActivity() {
             else{
                 database.child(userid).child("Categories").child("taxiCat").setValue(false).addOnSuccessListener {
                     Log.d("updateTaxiCat", "updateTaxiCat: taxiCat = false")
-                    database.child("TaxiCategory").child(userid).setValue(null)
+                    // Remove user from category sorted table
+                    database.child("All_Categories").child("TaxiCategory").child("Workers").child(userid).setValue(null)
                 }.addOnFailureListener {
                     Log.d("updateTaxiCat", "updateTaxiCat: taxiCat can't be updated")
                 }

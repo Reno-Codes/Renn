@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -19,7 +20,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
 
     private lateinit var captionTv: TextView
-    private lateinit var jobAlertBtn: Button
+    private lateinit var settingsBtn: ImageButton
     private lateinit var jobEt: EditText
     private lateinit var sendJobBtn: Button
     private lateinit var btnSignOut: Button
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         captionTv = findViewById(R.id.captionTv)
-        jobAlertBtn = findViewById(R.id.jobAlertBtn)
+        settingsBtn = findViewById(R.id.settingsBtn)
         jobEt = findViewById(R.id.jobEt)
         sendJobBtn = findViewById(R.id.sendJobBtn)
         btnSignOut = findViewById(R.id.signOutBtn)
@@ -42,13 +43,15 @@ class MainActivity : AppCompatActivity() {
             auth.signOut()
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_down,R.anim.slide_up)
             // using finish() to end the activity
             finish()
         }
 
-        jobAlertBtn.setOnClickListener {
-            val intent = Intent(this, ProfileActivity::class.java)
+        settingsBtn.setOnClickListener {
+            val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left)
         }
 
         sendJobBtn.setOnClickListener {
@@ -60,6 +63,7 @@ class MainActivity : AppCompatActivity() {
                 database = FirebaseDatabase.getInstance().getReference("Users")
                 val userid = FirebaseAuth.getInstance().currentUser!!.uid
                 val job = Job(jobEt.text.toString())
+                database.child("All_Categories").child("HomeCategory").child("Posted_jobs").child(userid).setValue(userid)
                 database.child(userid).child("Jobs").setValue(job).addOnSuccessListener {
                     Log.d("JobPostToDB", "JobPostDB: Job posted")
                     Toast.makeText(this, "Job posted!", Toast.LENGTH_SHORT).show()
@@ -77,11 +81,11 @@ class MainActivity : AppCompatActivity() {
             Log.d("checkLoggedInTAG", "checkLoggedIn: User not logged in")
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-            // using finish() to end the activity
+            Toast.makeText(this,"You're logged out..", Toast.LENGTH_SHORT).show()
             finish()
         }
         else{
-            captionTv.text = "Signed in as\n${auth.currentUser!!.email}"
+            captionTv.text = "${auth.currentUser!!.email}"
         }
     }
 }
