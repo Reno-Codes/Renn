@@ -41,7 +41,8 @@
             android:textColor="#FBFBFF"
             android:inputType="textEmailAddress"
             android:minHeight="48dp"
-            android:textColorHint="@color/whiteTransparent" />
+            android:textColorHint="@color/whiteTransparent"
+            android:visibility="invisible"/>
 
         <EditText
             android:id="@+id/etSPassword"
@@ -56,7 +57,8 @@
             android:textColor="#FBFBFF"
             android:inputType="textPassword"
             android:minHeight="48dp"
-            android:textColorHint="@color/whiteTransparent" />
+            android:textColorHint="@color/whiteTransparent"
+            android:visibility="invisible"/>
 
         <EditText
             android:id="@+id/etSConfPassword"
@@ -71,26 +73,66 @@
             android:inputType="textPassword"
             android:minHeight="48dp"
             android:textColorHint="@color/whiteTransparent"
-            tools:ignore="TextContrastCheck" />
+            tools:ignore="TextContrastCheck"
+            android:visibility="invisible"/>
 
         <Button
             android:id="@+id/btnSSigned"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="15dp"
-            android:background="#01BAEF"
-            android:text="Sign up"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center"
+            android:text="Sign up with email"
             tools:ignore="TextContrastCheck" />
 
-        <TextView
-            android:id="@+id/tvRedirectLogin"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_margin="10dp"
-            android:text="Already have an account? Login"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp">
+
+            <TextView
+                android:id="@+id/pretvRedirectLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Already have an account? "
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tvRedirectLogin"
+                android:gravity="center"
+                android:textColor="#FBFBFF"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvRedirectLogin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/sign_in"
+                android:textColor="#FBFBFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:textColor="#FBFBFF"
-            android:textSize="16sp" />
+            android:text="@string/or"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="25dp"/>
+
+        <com.google.android.gms.common.SignInButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="15dp"/>
+
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

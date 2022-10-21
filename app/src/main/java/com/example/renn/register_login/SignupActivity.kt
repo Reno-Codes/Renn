@@ -1,13 +1,18 @@
-package com.example.renn
+package com.example.renn.register_login
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.example.renn.Categories
+import com.example.renn.MainActivity
+import com.example.renn.R
+import com.example.renn.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
@@ -44,14 +49,24 @@ class SignupActivity : AppCompatActivity() {
 
 
         btnSignUp.setOnClickListener {
-            signUpUser()
+            // Show email and password editTexts
+            etEmail.visibility = View.VISIBLE
+            etPass.visibility = View.VISIBLE
+            etConfPass.visibility = View.VISIBLE
+
+            if (etEmail.text.toString().length > 3 && etPass.text.isNotEmpty() && etConfPass.text.isNotEmpty() && etPass.text == etConfPass.text){
+                signUpUser()
+            }
+            else{
+                return@setOnClickListener
+            }
         }
 
         // switching from signUp Activity to Login Activity
         tvRedirectLogin.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-            overridePendingTransition(R.anim.slide_up,R.anim.slide_down)
+            overridePendingTransition(R.anim.slide_up, R.anim.slide_down)
         }
     }
 
@@ -100,8 +115,11 @@ class SignupActivity : AppCompatActivity() {
                 Toast.makeText(this, "Successfully signed Up", Toast.LENGTH_SHORT).show()
                 database = FirebaseDatabase.getInstance().getReference("Users")
                 val userid= FirebaseAuth.getInstance().currentUser!!.uid
+
                 val user = User(email = email, userid = userid, workEnabled = false)
                 val userCategories = Categories(homeCat = false, taxiCat = false)
+
+                // Add to User with details to Realtime Database
                 database.child(userid).setValue(user).addOnSuccessListener {
                     Log.d("PushEmailToDB", "signUpUser: Saved to database!")
                     database.child(userid).child("Categories").setValue(userCategories)
@@ -115,7 +133,7 @@ class SignupActivity : AppCompatActivity() {
                         Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
-                        overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left)
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                         // using finish() to end the activity
                         finish()
 

@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Renn</string>
-    <string name="login">Login</string>
+    <string name="sign_in">Sign in</string>
     <string name="password">Password</string>
-    <string name="don_t_have_an_account_create_one">Don\'t have an account? Create one</string>
+    <string name="don_t_have_an_account_sign_up">Don\'t have an account? Sign up</string>
     <string name="email">Email</string>
     <string name="home_and_garden">Home and Garden</string>
     <string name="get_notifications_for_jobs">Get notifications for jobs</string>
@@ -14,4 +14,6 @@
     <string name="what_do_you_need">What do you need?</string>
     <string name="post">Post</string>
     <string name="job_alerts">Job Alerts</string>
+    <string name="sign_up">Sign up</string>
+    <string name="or">or</string>
 </resources>
