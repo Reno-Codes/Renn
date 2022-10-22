@@ -127,14 +127,16 @@
             android:textColor="#FBFBFF"
             android:text="@string/or"
             android:gravity="center_horizontal"
-            android:layout_marginTop="25dp"/>
+            android:layout_marginTop="25dp"
+            android:visibility="invisible"/>
 
         <com.google.android.gms.common.SignInButton
             android:id="@+id/google_singIn_Btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="15dp"/>
+            android:layout_margin="15dp"
+            android:visibility="invisible"/>
 
 
     </LinearLayout>
