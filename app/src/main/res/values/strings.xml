@@ -16,4 +16,6 @@
     <string name="job_alerts">Job Alerts</string>
     <string name="sign_up">Sign up</string>
     <string name="or">or</string>
+    <string name="google_webClient_ID">114323907893-rg6bfevfbh94rc6tr8jrbces3j32e6sk.apps.googleusercontent.com</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>

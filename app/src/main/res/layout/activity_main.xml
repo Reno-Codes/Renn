@@ -31,17 +31,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="#0000"
+                    android:contentDescription="@string/app_name"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
                     android:src="@drawable/ic_baseline_menu_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="DuplicateSpeakableTextCheck" />
 
                 <TextView
                     android:id="@+id/captionTv"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
-                    android:text="email"
+                    android:text="@string/email"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -54,6 +58,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="#0000"
+                    android:contentDescription="@string/app_name"
+                    android:minWidth="48dp"
+                    android:minHeight="48dp"
                     android:src="@drawable/ic_baseline_settings_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -89,28 +96,47 @@
                 android:minHeight="48dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="100dp"
-                android:layout_marginRight="15dp"/>
+                android:layout_marginRight="15dp"
+                android:importantForAutofill="no" />
 
             <Button
                 android:id="@+id/sendJobBtn"
+                style="@style/TextAppearance.MaterialComponents.Body2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/post"
                 android:textAllCaps="true"
-                style="@style/TextAppearance.MaterialComponents.Body2"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                tools:ignore="TextContrastCheck" />
 
 
             <Button
                 android:id="@+id/signOutBtn"
+                style="@style/TextAppearance.MaterialComponents.Body2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/sign_out"
-                style="@style/TextAppearance.MaterialComponents.Body2"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                tools:ignore="TextContrastCheck" />
 
+            <Button
+                android:id="@+id/mapBtn"
+                style="@style/TextAppearance.MaterialComponents.Body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Map"
+                android:textColor="@color/white"
+                tools:ignore="TextContrastCheck" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </FrameLayout>
         </LinearLayout>
     </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

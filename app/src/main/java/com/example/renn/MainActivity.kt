@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import com.example.renn.maps.MapsActivity
 import com.example.renn.register_login.LoginActivity
 import com.example.renn.settings.SettingsActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -26,6 +27,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var jobEt: EditText
     private lateinit var sendJobBtn: Button
     private lateinit var btnSignOut: Button
+    private lateinit var btnMap: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +39,14 @@ class MainActivity : AppCompatActivity() {
         jobEt = findViewById(R.id.jobEt)
         sendJobBtn = findViewById(R.id.sendJobBtn)
         btnSignOut = findViewById(R.id.signOutBtn)
+        btnMap = findViewById(R.id.mapBtn)
 
         checkLoggedIn()
+
+        btnMap.setOnClickListener {
+            val intent = Intent(this, MapsActivity::class.java)
+            startActivity(intent)
+        }
 
         btnSignOut.setOnClickListener {
             Toast.makeText(this, "Signed out.", Toast.LENGTH_SHORT).show()

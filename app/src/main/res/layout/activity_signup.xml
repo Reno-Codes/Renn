@@ -21,10 +21,11 @@
 
         <TextView
             android:layout_width="match_parent"
+            android:id="@+id/tvSignupWelcome"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:layout_marginTop="25dp"
-            android:text="Create  account"
+            android:text="Welcome"
             android:textColor="#FBFBFF"
             android:textSize="25sp" />
 
@@ -98,11 +99,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Already have an account? "
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/tvRedirectLogin"
                 android:gravity="center"
                 android:textColor="#FBFBFF"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tvRedirectLogin"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tvRedirectLogin"
@@ -113,6 +115,7 @@
                 android:textColor="#FBFBFF"
                 android:textSize="16sp"
                 android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@id/pretvRedirectLogin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -127,6 +130,7 @@
             android:layout_marginTop="25dp"/>
 
         <com.google.android.gms.common.SignInButton
+            android:id="@+id/google_singIn_Btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
