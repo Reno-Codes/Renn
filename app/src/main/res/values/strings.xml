@@ -1,4 +1,6 @@
 <resources>
+    <string name="google_webClient_ID">114323907893-rg6bfevfbh94rc6tr8jrbces3j32e6sk.apps.googleusercontent.com</string>
+    <string name="map_id">e0c7b4f331529016</string>
     <string name="app_name">Renn</string>
     <string name="sign_in">Sign in</string>
     <string name="password">Password</string>
@@ -10,12 +12,20 @@
     <string name="enable_work">Enable Work</string>
     <string name="disable_work">Disable Work</string>
     <string name="sign_out">Sign out</string>
-    <string name="signed_in_as">Signed in as ...</string>
+    <string name="signed_in_as">Signed in as \.\.\.</string>
     <string name="what_do_you_need">What do you need?</string>
     <string name="post">Post</string>
     <string name="job_alerts">Job Alerts</string>
     <string name="sign_up">Sign up</string>
     <string name="or">or</string>
-    <string name="google_webClient_ID">114323907893-rg6bfevfbh94rc6tr8jrbces3j32e6sk.apps.googleusercontent.com</string>
     <string name="title_activity_maps">MapsActivity</string>
+    <string name="update_location">Update location</string>
+    <string name="welcome">Welcome</string>
+    <string name="e_mail_address">E-mail address</string>
+    <string name="etPassword">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="sign_up_with_email">Sign up with email</string>
+    <string name="already_have_an_account">Already have an account?\ </string>
+    <string name="don_t_have_an_account">Don\'t have an account?\ </string>
+    <string name="settings">Settings</string>
 </resources>

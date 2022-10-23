@@ -20,7 +20,6 @@ import com.example.renn.settings.SettingsActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
@@ -34,8 +33,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
 
     private lateinit var captionTv: TextView
-    private lateinit var settingsBtn: ImageButton
     private lateinit var jobEt: EditText
+
+    private lateinit var settingsBtn: ImageButton
     private lateinit var sendJobBtn: Button
     private lateinit var btnSignOut: Button
     private lateinit var btnMap: Button
@@ -55,24 +55,27 @@ class MainActivity : AppCompatActivity() {
         btnMap = findViewById(R.id.mapBtn)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
+        // Check if user is signed in
         checkLoggedIn()
 
+        // Sign out button
         btnSignOut.setOnClickListener {
-            Toast.makeText(this, "Signed out.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Signed out", Toast.LENGTH_SHORT).show()
+            // Sign out
             auth.signOut()
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-            overridePendingTransition(R.anim.slide_down,R.anim.slide_up)
-            // using finish() to end the activity
+            // finish() to end current activity
             finish()
         }
 
+        // Settings button
         settingsBtn.setOnClickListener {
             val intent = Intent(this, SettingsActivity::class.java)
             startActivity(intent)
-            overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left)
         }
 
+        // Post job button
         sendJobBtn.setOnClickListener {
             if (jobEt.text.isEmpty()){
                 Toast.makeText(this, "Job can't be empty!", Toast.LENGTH_SHORT).show()
@@ -82,15 +85,19 @@ class MainActivity : AppCompatActivity() {
                 database = FirebaseDatabase.getInstance().getReference("Users")
                 val userid = FirebaseAuth.getInstance().currentUser!!.uid
                 val job = Job(jobEt.text.toString())
+                // Post job to general category All_Categories
                 database.child("All_Categories").child("HomeCategory").child("Posted_jobs").child(userid).setValue(userid)
-                database.child(userid).child("Jobs").setValue(job).addOnSuccessListener {
-                    Log.d("JobPostToDB", "JobPostDB: Job posted")
-                    Toast.makeText(this, "Job posted!", Toast.LENGTH_SHORT).show()
-                    jobEt.text.clear()
+                    .addOnSuccessListener {
+                    // Post jon to user's Jobs table
+                    database.child(userid).child("Jobs").setValue(job)
+                        .addOnSuccessListener {
+                        Log.d("JobPostToDB", "JobPostDB: Job posted")
+                        Toast.makeText(this, "Job posted!", Toast.LENGTH_SHORT).show()
+                        jobEt.text.clear()
+                    }
                 }.addOnFailureListener {
                     Log.d("JobPostToDB", "JobPostDB: Failed posting job")
                 }
-
             }
         }
 
@@ -99,6 +106,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this@MainActivity, "Updating location...", Toast.LENGTH_SHORT).show()
             database = FirebaseDatabase.getInstance().getReference("Users")
             val userid = FirebaseAuth.getInstance().currentUser!!.uid
+            @Suppress("DEPRECATION")
             fusedLocationClient.getCurrentLocation(
                 LocationRequest.PRIORITY_HIGH_ACCURACY,
                 object : CancellationToken() {
@@ -110,12 +118,15 @@ class MainActivity : AppCompatActivity() {
                 if (location == null)
                     Toast.makeText(this, "Cannot get location.", Toast.LENGTH_SHORT).show()
                 else {
+
+                    // Set user's location latitude
                     database.child(userid).child("locationLatitude").setValue(location.latitude)
                         .addOnSuccessListener {
                             Log.d(
                                 "SettingUserLocation",
                                 "SettingUserLocation: Location Latitude saved to database!"
                             )
+                            // Set user's location longitude
                             database.child(userid).child("locationLongitude")
                                 .setValue(location.longitude)
                                 .addOnSuccessListener {
@@ -142,6 +153,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        // Btn Update location
         btnMap.setOnClickListener {
             if (!checkPermission()) {
                 permissionDialog()
@@ -150,17 +162,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-
-
     }
+
+    // Check if user is signed in
     @SuppressLint("SetTextI18n")
     private fun checkLoggedIn(){
         if(auth.currentUser == null){
             Log.d("checkLoggedInTAG", "checkLoggedIn: User not logged in")
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-            Toast.makeText(this,"You're logged out..", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,"Please sign in..", Toast.LENGTH_SHORT).show()
             finish()
         }
         else{
@@ -200,6 +211,7 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    // Show Permission alert dialog
     private fun permissionDialog() {
         val dialogBuilder = AlertDialog.Builder(this)
 
@@ -208,7 +220,7 @@ class MainActivity : AppCompatActivity() {
             // if the dialog is cancelable
             .setCancelable(false)
             // positive button text and action
-            .setPositiveButton("Ok") { _, id ->
+            .setPositiveButton("Ok") { _, _ ->
                 getPermission()
             }
 

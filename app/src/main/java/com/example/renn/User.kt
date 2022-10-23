@@ -1,6 +1,5 @@
 package com.example.renn
 
-import com.google.android.gms.maps.model.LatLng
 
 data class User(
     val email: String? = null,

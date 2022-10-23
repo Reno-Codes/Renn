@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:layout_marginTop="25dp"
-            android:text="Welcome"
+            android:text="@string/welcome"
             android:textColor="#FBFBFF"
             android:textSize="25sp" />
 
@@ -38,7 +38,7 @@
             android:layout_marginRight="15dp"
             android:autofillHints="emailAddress"
             android:ems="10"
-            android:hint="E-mail address"
+            android:hint="@string/e_mail_address"
             android:textColor="#FBFBFF"
             android:inputType="textEmailAddress"
             android:minHeight="48dp"
@@ -54,7 +54,7 @@
             android:layout_marginRight="15dp"
             android:autofillHints="password"
             android:ems="10"
-            android:hint="Password"
+            android:hint="@string/etPassword"
             android:textColor="#FBFBFF"
             android:inputType="textPassword"
             android:minHeight="48dp"
@@ -69,13 +69,14 @@
             android:layout_marginTop="15dp"
             android:layout_marginRight="15dp"
             android:ems="10"
-            android:hint="Confirm password"
+            android:hint="@string/confirm_password"
             android:textColor="#FBFBFF"
             android:inputType="textPassword"
             android:minHeight="48dp"
             android:textColorHint="@color/whiteTransparent"
             tools:ignore="TextContrastCheck"
-            android:visibility="invisible"/>
+            android:visibility="invisible"
+            android:autofillHints="" />
 
         <Button
             android:id="@+id/btnSSigned"
@@ -85,26 +86,22 @@
             android:layout_marginEnd="15dp"
             android:layout_marginTop="15dp"
             android:layout_gravity="center"
-            android:text="Sign up with email"
+            android:text="@string/sign_up_with_email"
             tools:ignore="TextContrastCheck" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp">
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <TextView
-                android:id="@+id/pretvRedirectLogin"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Already have an account? "
+                android:text="@string/already_have_an_account"
                 android:gravity="center"
                 android:textColor="#FBFBFF"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/tvRedirectLogin"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tvRedirectLogin"
@@ -114,10 +111,17 @@
                 android:text="@string/sign_in"
                 android:textColor="#FBFBFF"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@id/pretvRedirectLogin"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp">
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

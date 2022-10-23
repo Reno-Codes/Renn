@@ -68,40 +68,31 @@
             android:text="@string/sign_in"
             tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/don_t_have_an_account"
+            android:textColor="#FBFBFF"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tvRedirectSignUp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp">
+            android:gravity="center"
+            android:text="@string/sign_up"
+            android:textColor="#FBFBFF"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
-            <TextView
-                android:id="@+id/pretvRedirectSignUp"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="Don't have an account? "
-                android:textColor="#FBFBFF"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/tvRedirectSignUp"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/tvRedirectSignUp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="@string/sign_up"
-                android:textColor="#FBFBFF"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@id/pretvRedirectSignUp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:layout_width="match_parent"
@@ -109,13 +100,15 @@
             android:textColor="#FBFBFF"
             android:text="@string/or"
             android:gravity="center_horizontal"
-            android:layout_marginTop="25dp"/>
+            android:layout_marginTop="25dp"
+            android:visibility="invisible"/>
 
         <com.google.android.gms.common.SignInButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_margin="15dp"/>
+            android:layout_margin="15dp"
+            android:visibility="invisible"/>
 
 
     </LinearLayout>

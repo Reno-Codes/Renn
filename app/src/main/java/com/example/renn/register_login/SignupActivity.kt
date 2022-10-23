@@ -1,7 +1,6 @@
 package com.example.renn.register_login
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
@@ -36,13 +35,15 @@ import java.util.regex.Pattern
 
 @Suppress("RedundantIf")
 class SignupActivity : AppCompatActivity() {
+
+    // View bindings
     private lateinit var etEmail: EditText
     private lateinit var etConfPass: EditText
     private lateinit var etPass: EditText
     private lateinit var btnSignUp: Button
     private lateinit var tvRedirectLogin: TextView
     private lateinit var tvSignupWelcome: TextView
-    private lateinit var google_signIn_Btn: SignInButton
+    private lateinit var googleSignInBtn: SignInButton
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -63,9 +64,11 @@ class SignupActivity : AppCompatActivity() {
         btnSignUp = findViewById(R.id.btnSSigned)
         tvRedirectLogin = findViewById(R.id.tvRedirectLogin)
         tvSignupWelcome = findViewById(R.id.tvSignupWelcome)
-        google_signIn_Btn = findViewById(R.id.google_singIn_Btn)
+        googleSignInBtn = findViewById(R.id.google_singIn_Btn)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        // Default location
         userLoc = LatLng(0.0, 0.0)
 
         // Initialising auth object
@@ -92,7 +95,6 @@ class SignupActivity : AppCompatActivity() {
         tvRedirectLogin.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-            overridePendingTransition(R.anim.slide_up, R.anim.slide_down)
         }
     }
 
@@ -168,7 +170,6 @@ class SignupActivity : AppCompatActivity() {
                         Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
-                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
                         // using finish() to end the activity
                         finish()
 
@@ -208,6 +209,7 @@ class SignupActivity : AppCompatActivity() {
         )
     }
 
+    // Permission alert dialog
     private fun permissionDialog(){
         val dialogBuilder = AlertDialog.Builder(this)
 
@@ -216,7 +218,7 @@ class SignupActivity : AppCompatActivity() {
             // if the dialog is cancelable
             .setCancelable(false)
             // positive button text and action
-            .setPositiveButton("Ok") { _, id ->
+            .setPositiveButton("Ok") { _, _ ->
                 getPermission()
             }
 
@@ -228,9 +230,11 @@ class SignupActivity : AppCompatActivity() {
         alert.show()
     }
 
+    // Get user location and save it to User's table in db
     @SuppressLint("MissingPermission")
     private fun getLocation(){
         val userid = FirebaseAuth.getInstance().currentUser!!.uid
+        @Suppress("DEPRECATION")
         fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, object : CancellationToken() {
             override fun onCanceledRequested(p0: OnTokenCanceledListener) = CancellationTokenSource().token
             override fun isCancellationRequested() = false }).addOnSuccessListener { location: Location? ->

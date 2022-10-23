@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageButton
 import com.example.renn.R
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.firebase.auth.FirebaseAuth
@@ -17,6 +18,8 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var taxiSwitch: SwitchMaterial
     private lateinit var workSwitch: SwitchMaterial
 
+    private lateinit var backBtn: ImageButton
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +28,12 @@ class SettingsActivity : AppCompatActivity() {
         homeSwitch = findViewById(R.id.switchHome)
         taxiSwitch = findViewById(R.id.switchTaxi)
         workSwitch = findViewById(R.id.switchWork)
+
+        // Back button
+        backBtn = findViewById(R.id.backBtn)
+        backBtn.setOnClickListener {
+            finish()
+        }
 
         database = FirebaseDatabase.getInstance().getReference("Users")
         val userid= FirebaseAuth.getInstance().currentUser!!.uid
