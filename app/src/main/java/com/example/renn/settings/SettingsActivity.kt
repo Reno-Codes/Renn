@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
+import android.widget.ImageView
 import com.example.renn.R
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.firebase.auth.FirebaseAuth
@@ -18,7 +19,7 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var taxiSwitch: SwitchMaterial
     private lateinit var workSwitch: SwitchMaterial
 
-    private lateinit var backBtn: ImageButton
+    private lateinit var backBtn: ImageView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

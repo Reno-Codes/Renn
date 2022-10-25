@@ -1,0 +1,7 @@
+Layouts and Styles
+1. TODO (Define colors for buttons, backgrounds, topBars etc for BOTH Light and Night Modes)
+2. TODO (Correct all color in all activities and layouts to use defined colors)
+3. TODO (Correct all activities to use reusable functions)
+
+Activities
+4. TODO (Make functions reusable (Folder Utils, inside make Firebase utils, Maps utils etc and their functions))

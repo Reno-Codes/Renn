@@ -15,61 +15,53 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_height="wrap_content"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:paddingEnd="15dp"
-            tools:ignore="RtlSymmetry">
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:orientation="vertical"
+            android:gravity="center">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="?actionBarSize">
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/menuBtn"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:padding="15dp"
                     android:background="#0000"
                     android:contentDescription="@string/app_name"
                     android:minWidth="48dp"
                     android:minHeight="48dp"
-                    android:src="@drawable/ic_baseline_menu_24"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:ignore="DuplicateSpeakableTextCheck" />
+                    android:src="@drawable/ic_baseline_menu_24" />
 
                 <TextView
-                    android:id="@+id/captionTv"
+                    android:id="@+id/tvEmail"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
                     android:gravity="center"
                     android:text="@string/email"
                     android:textAlignment="center"
-                    android:textColor="@color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/settingsBtn"
-                    app:layout_constraintStart_toEndOf="@+id/menuBtn"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:textColor="@color/white" />
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/settingsBtn"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:background="#0000"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:padding="15dp"
                     android:contentDescription="@string/app_name"
-                    android:minWidth="48dp"
-                    android:minHeight="48dp"
-                    android:src="@drawable/ic_baseline_settings_24"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:src="@drawable/ic_baseline_settings_24"/>
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            </RelativeLayout>
 
-        </androidx.appcompat.widget.Toolbar>
+        </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -78,10 +70,7 @@
             android:orientation="vertical"
             android:padding="15dp"
             android:paddingTop="40dp"
-            android:paddingBottom="40dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar">
+            android:paddingBottom="40dp">
 
             <EditText
                 android:id="@+id/jobEt"
@@ -110,12 +99,23 @@
                 tools:ignore="TextContrastCheck" />
 
             <Button
-                android:id="@+id/mapBtn"
+                android:id="@+id/categoriesBtn"
                 style="@style/TextAppearance.MaterialComponents.Body2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="@string/update_location"
+                android:text="Categories"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                tools:ignore="TextContrastCheck" />
+
+            <Button
+                android:id="@+id/profileBtn"
+                style="@style/TextAppearance.MaterialComponents.Body2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Profile"
                 android:textColor="@color/white"
                 tools:ignore="TextContrastCheck" />
 
