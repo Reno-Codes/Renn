@@ -46,8 +46,8 @@ class MainActivity : AppCompatActivity() {
 
         // Bind Auth and Database
         auth = FirebaseAuth.getInstance()
+        val userid = auth.currentUser?.uid
         databaseUsersRef = FirebaseDatabase.getInstance().getReference("Users")
-        val userid = FirebaseAuth.getInstance().currentUser!!.uid
 
         // Bind TextViews and EditTexts
         tvEmail = findViewById(R.id.tvEmail)
@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
             else{
                 val job = Job(etJob.text.toString())
                 // Post job to general category All_Categories
-                databaseUsersRef.child("All_Categories").child("HomeCategory").child("Posted_jobs").child(userid).setValue(userid)
+                databaseUsersRef.child("All_Categories").child("HomeCategory").child("Posted_jobs").child(userid!!).setValue(userid)
                     .addOnSuccessListener {
                     // Post jon to user's Jobs table
                     databaseUsersRef.child(userid).child("Jobs").setValue(job)
