@@ -45,7 +45,7 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_maps)
+        setContentView(R.layout.activity_profile)
 
         // Find views
         backBtn = findViewById(R.id.backBtn)

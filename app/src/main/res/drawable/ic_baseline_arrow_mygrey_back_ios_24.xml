@@ -2,12 +2,12 @@
     android:autoMirrored="true"
     android:width="24dp"
     android:height="24dp"
-    android:tint="@color/myGrey"
+    android:tint="@color/background_color_grey"
     android:viewportWidth="24"
     android:viewportHeight="24"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:translateX="6" android:translateY="0">
-        <path android:fillColor="@color/myGrey"
+        <path android:fillColor="@color/background_color_grey"
             android:pathData="M11.67,3.87L9.9,2.1 0,12l9.9,9.9 1.77,-1.77L3.54,12z"/>
     </group>
 </vector>

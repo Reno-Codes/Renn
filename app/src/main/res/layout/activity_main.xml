@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#353531">
+    android:background="@color/background_color_grey">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -32,7 +32,6 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:padding="15dp"
-                    android:background="#0000"
                     android:contentDescription="@string/app_name"
                     android:minWidth="48dp"
                     android:minHeight="48dp"
@@ -78,8 +77,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/what_do_you_need"
-                android:textColorHint="@color/whiteTransparent"
-                android:textColor="#FBFBFF"
+                android:textColorHint="@color/description_color_white"
+                android:textColor="@color/white"
                 android:inputType="text"
                 android:minHeight="48dp"
                 android:layout_marginLeft="15dp"
@@ -95,8 +94,7 @@
                 android:layout_gravity="center"
                 android:text="@string/post"
                 android:textAllCaps="true"
-                android:textColor="@color/white"
-                tools:ignore="TextContrastCheck" />
+                android:textColor="@color/white" />
 
             <Button
                 android:id="@+id/categoriesBtn"
@@ -106,8 +104,7 @@
                 android:layout_gravity="center"
                 android:text="Categories"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
-                tools:ignore="TextContrastCheck" />
+                android:textColor="@color/white"/>
 
             <Button
                 android:id="@+id/profileBtn"
@@ -116,8 +113,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Profile"
-                android:textColor="@color/white"
-                tools:ignore="TextContrastCheck" />
+                android:textColor="@color/white"/>
 
             <Space
                 android:layout_width="match_parent"
@@ -130,8 +126,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/sign_out"
-                android:textColor="@color/white"
-                tools:ignore="TextContrastCheck" />
+                android:textColor="@color/white" />
 
         </LinearLayout>
     </LinearLayout>

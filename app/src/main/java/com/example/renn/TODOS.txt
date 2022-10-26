@@ -1,7 +1,11 @@
 Layouts and Styles
-1. TODO (Define colors for buttons, backgrounds, topBars etc for BOTH Light and Night Modes)
-2. TODO (Correct all color in all activities and layouts to use defined colors)
-3. TODO (Correct all activities to use reusable functions)
+1. Partially Done - TODO (Define colors for buttons, backgrounds, topBars etc for BOTH Light and Night Modes)
+
+2. DONE - (Correct all color in all activities and layouts to use defined colors)
 
 Activities
-4. TODO (Make functions reusable (Folder Utils, inside make Firebase utils, Maps utils etc and their functions))
+3. TODO (Make functions reusable (Folder Utils, inside make Firebase utils, Maps utils etc and their functions))
+-- Stao na MapsRepository
+3.1 TODO( Add checkLoggedIn from MainActivity.kt to FirebaseRepository and make it return Boolean )
+
+4. TODO (Correct all activities to use reusable functions)

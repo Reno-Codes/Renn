@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="google_webClient_ID">114323907893-rg6bfevfbh94rc6tr8jrbces3j32e6sk.apps.googleusercontent.com</string>
     <string name="map_id">e0c7b4f331529016</string>
@@ -9,7 +10,7 @@
     <string name="home_and_garden">Home and Garden</string>
     <string name="get_notifications_for_jobs">Get notifications for jobs</string>
     <string name="taxi">Taxi</string>
-    <string name="enable_work">Enable Work</string>
+    <string name="enable_work" translatable="false">Enable Work</string>
     <string name="disable_work">Disable Work</string>
     <string name="sign_out">Sign out</string>
     <string name="signed_in_as">Signed in as \.\.\.</string>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#353531"
+    android:background="@color/background_color_grey"
     tools:context=".settings.SettingsActivity">
 
     <LinearLayout
@@ -71,8 +71,7 @@
                     android:gravity="center_horizontal"
                     android:layout_marginTop="32dp"
                     android:text="@string/get_notifications_for_jobs"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="#FBFBFF"
+                    android:textColor="@color/white"
                     android:textSize="16sp"/>
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
@@ -82,7 +81,7 @@
                     android:layout_marginTop="32dp"
                     android:minHeight="48dp"
                     android:text="@string/enable_work"
-                    android:textColor="#FBFBFF"/>
+                    android:textColor="@color/white"/>
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switchHome"
@@ -91,7 +90,7 @@
                     android:layout_marginTop="32dp"
                     android:minHeight="48dp"
                     android:text="@string/home_and_garden"
-                    android:textColor="#FBFBFF"
+                    android:textColor="@color/white"
                     android:visibility="invisible"/>
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
@@ -101,7 +100,7 @@
                     android:layout_marginTop="20dp"
                     android:minHeight="48dp"
                     android:text="@string/taxi"
-                    android:textColor="#FBFBFF"
+                    android:textColor="@color/white"
                     android:visibility="invisible"/>
 
             </LinearLayout>

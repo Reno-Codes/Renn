@@ -45,8 +45,8 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var tvSignupWelcome: TextView
     private lateinit var googleSignInBtn: SignInButton
 
+    // Google Maps etc
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-
     private lateinit var userLoc: LatLng
 
     // create Firebase authentication object

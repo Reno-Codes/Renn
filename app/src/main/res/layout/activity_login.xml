@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#353531"
+    android:background="@color/background_color_grey"
     tools:context=".register_login.LoginActivity">
 
     <LinearLayout
@@ -26,7 +26,7 @@
             android:gravity="center_horizontal"
             android:layout_marginTop="25dp"
             android:text="@string/sign_in"
-            android:textColor="#FBFBFF"
+            android:textColor="@color/white"
             android:textSize="25sp" />
 
         <EditText
@@ -41,8 +41,8 @@
             android:hint="@string/email"
             android:inputType="textEmailAddress"
             android:minHeight="48dp"
-            android:textColor="#FBFBFF"
-            android:textColorHint="@color/whiteTransparent" />
+            android:textColor="@color/white"
+            android:textColorHint="@color/description_color_white" />
 
         <EditText
             android:id="@+id/etPassword"
@@ -56,15 +56,14 @@
             android:hint="@string/password"
             android:inputType="textPassword"
             android:minHeight="48dp"
-            android:textColor="#FBFBFF"
-            android:textColorHint="@color/whiteTransparent" />
+            android:textColor="@color/white"
+            android:textColorHint="@color/description_color_white" />
 
         <Button
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
-
             android:text="@string/sign_in"
             tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
 
@@ -79,7 +78,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="@string/don_t_have_an_account"
-            android:textColor="#FBFBFF"
+            android:textColor="@color/white"
             android:textSize="16sp" />
 
         <TextView
@@ -88,7 +87,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/sign_up"
-            android:textColor="#FBFBFF"
+            android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -97,7 +96,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#FBFBFF"
+            android:textColor="@color/white"
             android:text="@string/or"
             android:gravity="center_horizontal"
             android:layout_marginTop="25dp"

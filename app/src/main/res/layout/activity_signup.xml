@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#353531">
+    android:background="@color/background_color_grey">
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -26,7 +26,7 @@
             android:gravity="center_horizontal"
             android:layout_marginTop="25dp"
             android:text="@string/welcome"
-            android:textColor="#FBFBFF"
+            android:textColor="@color/white"
             android:textSize="25sp" />
 
         <EditText
@@ -39,10 +39,10 @@
             android:autofillHints="emailAddress"
             android:ems="10"
             android:hint="@string/e_mail_address"
-            android:textColor="#FBFBFF"
+            android:textColor="@color/white"
             android:inputType="textEmailAddress"
             android:minHeight="48dp"
-            android:textColorHint="@color/whiteTransparent"
+            android:textColorHint="@color/description_color_white"
             android:visibility="invisible"/>
 
         <EditText
@@ -55,10 +55,10 @@
             android:autofillHints="password"
             android:ems="10"
             android:hint="@string/etPassword"
-            android:textColor="#FBFBFF"
+            android:textColor="@color/white"
             android:inputType="textPassword"
             android:minHeight="48dp"
-            android:textColorHint="@color/whiteTransparent"
+            android:textColorHint="@color/description_color_white"
             android:visibility="invisible"/>
 
         <EditText
@@ -70,10 +70,10 @@
             android:layout_marginRight="15dp"
             android:ems="10"
             android:hint="@string/confirm_password"
-            android:textColor="#FBFBFF"
+            android:textColor="@color/white"
             android:inputType="textPassword"
             android:minHeight="48dp"
-            android:textColorHint="@color/whiteTransparent"
+            android:textColorHint="@color/description_color_white"
             tools:ignore="TextContrastCheck"
             android:visibility="invisible"
             android:autofillHints="" />
@@ -100,7 +100,7 @@
                 android:layout_height="match_parent"
                 android:text="@string/already_have_an_account"
                 android:gravity="center"
-                android:textColor="#FBFBFF"
+                android:textColor="@color/white"
                 android:textSize="16sp" />
 
             <TextView
@@ -109,7 +109,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:text="@string/sign_in"
-                android:textColor="#FBFBFF"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -128,7 +128,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#FBFBFF"
+            android:textColor="@color/white"
             android:text="@string/or"
             android:gravity="center_horizontal"
             android:layout_marginTop="25dp"
