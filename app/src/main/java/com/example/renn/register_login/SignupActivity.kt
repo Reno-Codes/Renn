@@ -2,7 +2,6 @@ package com.example.renn.register_login
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -11,8 +10,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import com.example.renn.Categories
 import com.example.renn.MainActivity
 import com.example.renn.R
@@ -41,10 +38,8 @@ class SignupActivity : AppCompatActivity() {
     // Google Maps etc
     private val mapsRepository = MapsRepository()
 
-    private lateinit var userLocc: LatLng
+    private lateinit var userLoc: LatLng
 
-    /* By default, user have no permission until allowed */
-    private var haveLocationPermission : Boolean = false
     private lateinit var showDialogAndGetPermission : Unit
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -64,9 +59,10 @@ class SignupActivity : AppCompatActivity() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-        // Check location permission
-        haveLocationPermission = mapsRepository.checkPermission(this)
-        userLocc = mapsRepository.getUserLocation(this, this, fusedLocationClient)
+
+
+        // Default location
+        userLoc = LatLng(0.0, 0.0)
 
         // View Bindings
         etEmail = findViewById(R.id.etSEmailAddress)
@@ -76,6 +72,7 @@ class SignupActivity : AppCompatActivity() {
         tvRedirectLogin = findViewById(R.id.tvRedirectLogin)
         tvSignupWelcome = findViewById(R.id.tvSignupWelcome)
         googleSignInBtn = findViewById(R.id.google_singIn_Btn)
+
 
 
         // Sign Up button click listener
@@ -91,7 +88,7 @@ class SignupActivity : AppCompatActivity() {
 
             // First check if Location permission is allowed
             // then show alert dialog and ask for permission
-            if (!haveLocationPermission) {
+            if (!mapsRepository.checkPermission(this)) {
                 showDialogAndGetPermission = mapsRepository.showDialogAndGetPermission(this, this@SignupActivity)
             }
             else{
@@ -118,7 +115,7 @@ class SignupActivity : AppCompatActivity() {
 
         // Check if fields are empty
         if (email.isBlank() || pass.isBlank() || confirmPassword.isBlank()) {
-            Toast.makeText(this, "Enter email and password", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Empty email or password", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -141,16 +138,12 @@ class SignupActivity : AppCompatActivity() {
             if (signup.isSuccessful) {
                 // Get UserId
                 val userid = firebase.currentUserUid()
-                // Get User's location
-                val userLocation = userLocc
-
-
                 Toast.makeText(this, "Successfully signed Up", Toast.LENGTH_SHORT).show()
                 val user = User(
                     email = email,
                     userid = userid,
                     workEnabled = false,
-                    userLocation = userLocation
+                    userLocation = LatLng(userLoc.latitude, userLoc.longitude)
                 )
                 // User default categories
                 val userCategories = Categories(
@@ -161,6 +154,8 @@ class SignupActivity : AppCompatActivity() {
 
                 // Add to User to Realtime Database
                 usersRef.child(userid!!).setValue(user).addOnSuccessListener {
+                    // Set Users Current Location to db
+                    mapsRepository.getSetUserCurrentLocation(this, userid, usersRef, fusedLocationClient)
                     Log.d("PushUserToDB", "PushUserToDB: User saved to database!")
                     // Add user's default settings for categories to database
                     usersRef.child(userid).child("Categories").setValue(userCategories)

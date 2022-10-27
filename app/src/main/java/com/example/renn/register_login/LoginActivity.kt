@@ -10,7 +10,6 @@ import android.widget.Toast
 import com.example.renn.MainActivity
 import com.example.renn.R
 import com.example.renn.helpers.FirebaseRepository
-import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
 
@@ -41,7 +40,6 @@ class LoginActivity : AppCompatActivity() {
         tvRedirectSignUp.setOnClickListener {
             val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
-            // using finish() to end the activity
             finish()
         }
     }
@@ -61,8 +59,6 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-                // using finish() to end the current activity (activity_login)
                 finish()
             } else
                 Toast.makeText(this, "Login failed. Try again.", Toast.LENGTH_SHORT).show()

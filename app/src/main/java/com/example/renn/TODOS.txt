@@ -5,7 +5,8 @@ Layouts and Styles
 
 Activities
 3. TODO (Make functions reusable (Folder Utils, inside make Firebase utils, Maps utils etc and their functions))
--- Stao na MapsRepository
-3.1 TODO( Add checkLoggedIn from MainActivity.kt to FirebaseRepository and make it return Boolean )
+-- Stao na MapsRepository (DONE za sad)
+3.1 DONE - ( Add checkLoggedIn from MainActivity.kt to FirebaseRepository and make it return Boolean )
+3.2 STAO NA SettingsActivity.kt
 
 4. TODO (Correct all activities to use reusable functions)
