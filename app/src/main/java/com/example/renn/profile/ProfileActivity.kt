@@ -12,6 +12,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import com.example.renn.R
+import com.example.renn.helpers.MapsRepository
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -35,6 +36,8 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var database: DatabaseReference
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    private val mapsRepository = MapsRepository()
 
     // Bindings
     private lateinit var backBtn: ImageView
@@ -96,8 +99,8 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
             if (task.isSuccessful) {
                 // Get user's location LatLng from db
                 val snapshot = task.result
-                val userLat = snapshot.child("locationLatitude").getValue(Double::class.java)
-                val userLon = snapshot.child("locationLongitude").getValue(Double::class.java)
+                val userLat = snapshot.child("userLocation").child("latitude").getValue(Double::class.java)
+                val userLon = snapshot.child("userLocation").child("longitude").getValue(Double::class.java)
 
                 currentLocation = LatLng(userLat!!, userLon!!)
 
@@ -119,13 +122,20 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                         .getFromLocation(currentLocation.latitude, currentLocation.longitude, 1)
                             as List<Address>
 
-                    val address: String = addresses[0].getAddressLine(0)
-                    tvAddress.text = address
+                    var address: String = "Update your location"
                     /*val city: String = addresses[0].locality
                     val state: String = addresses[0].adminArea
                     val country: String = addresses[0].countryName
                     val postalCode: String = addresses[0].postalCode
                     val knownName: String = addresses[0].featureName*/
+
+                    if (addresses.isEmpty()){
+                        tvAddress.text = address
+                    }
+                    else{
+                        address = addresses[0].getAddressLine(0)
+                        tvAddress.text = address
+                    }
 
                     return address
                 }
@@ -164,8 +174,8 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
             if (task.isSuccessful) {
                 // Get user's location LatLng from db
                 val snapshot = task.result
-                val userLat = snapshot.child("locationLatitude").getValue(Double::class.java)
-                val userLon = snapshot.child("locationLongitude").getValue(Double::class.java)
+                val userLat = snapshot.child("userLocation").child("latitude").getValue(Double::class.java)
+                val userLon = snapshot.child("userLocation").child("longitude").getValue(Double::class.java)
 
                 currentLocation = LatLng(userLat!!, userLon!!)
 
@@ -187,13 +197,21 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                         .getFromLocation(currentLocation.latitude, currentLocation.longitude, 1)
                             as List<Address>
 
-                    val address: String = addresses[0].getAddressLine(0)
-                    tvAddress.text = address
+                    val address: String
                     /*val city: String = addresses[0].locality
                     val state: String = addresses[0].adminArea
                     val country: String = addresses[0].countryName
                     val postalCode: String = addresses[0].postalCode
                     val knownName: String = addresses[0].featureName*/
+
+                    if (addresses.isEmpty()){
+                        address = "Update your location"
+                        tvAddress.text = address
+                    }
+                    else{
+                        address = addresses[0].getAddressLine(0)
+                        tvAddress.text = address
+                    }
 
                     return address
                 }
@@ -212,6 +230,7 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
     }
     @SuppressLint("MissingPermission")
     private fun updateUsersLocation() {
+        val userLocation = mapsRepository.getUserLocation(this, this, fusedLocationClient)
         Toast.makeText(this@ProfileActivity, "Updating location...", Toast.LENGTH_SHORT).show()
         database = FirebaseDatabase.getInstance().getReference("Users")
         val userid = FirebaseAuth.getInstance().currentUser!!.uid
@@ -228,38 +247,17 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                 Toast.makeText(this, "Cannot get location.", Toast.LENGTH_SHORT).show()
             else {
 
-                // Set user's location latitude
-                database.child(userid).child("locationLatitude").setValue(location.latitude)
+                // Set user's location
+                database.child(userid).child("userLocation").setValue(userLocation)
                     .addOnSuccessListener {
-                        Log.d(
-                            "SettingUserLocation",
-                            "SettingUserLocation: Location Latitude saved to database!"
-                        )
-                        // Set user's location longitude
-                        database.child(userid).child("locationLongitude")
-                            .setValue(location.longitude)
-                            .addOnSuccessListener {
-                                Toast.makeText(this@ProfileActivity, "Location updated!", Toast.LENGTH_SHORT).show()
-                                mMap.clear()
-                                updateMap(mMap)
-                                Log.d(
-                                    "SettingUserLocation",
-                                    "SettingUserLocation: Location Longitude saved to database!"
-                                )
-                            }.addOnFailureListener {
-                                Log.d(
-                                    "SettingUserLocation",
-                                    "SettingUserLocation: Location Longitude NOT SAVED!"
-                                )
-                            }.addOnFailureListener {
-                                Log.d(
-                                    "SettingUserLocation",
-                                    "SettingUserLocation: Location Latitude NOT SAVED!"
-                                )
-                            }
+                        Log.d("SettingUserLocation", "SettingUserLocation: Location saved to database!")
+                        Toast.makeText(this@ProfileActivity, "Location updated!", Toast.LENGTH_SHORT).show()
+                        mMap.clear()
+                        updateMap(mMap)
+                    }.addOnFailureListener {
+                        Log.d("SettingUserLocation","SettingUserLocation: Location Latitude NOT SAVED!")
                     }
+                }
             }
-        }
     }
-
 }

@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.renn.MainActivity
 import com.example.renn.R
+import com.example.renn.helpers.FirebaseRepository
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
@@ -18,8 +19,9 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var etPass: EditText
     private lateinit var btnLogin: Button
 
-    // Creating firebaseAuth object
-    private lateinit var auth: FirebaseAuth
+    // Auth and Database
+    private val firebase = FirebaseRepository()
+    private val auth = firebase.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,8 +33,6 @@ class LoginActivity : AppCompatActivity() {
         btnLogin = findViewById(R.id.btnLogin)
         tvRedirectSignUp = findViewById(R.id.tvRedirectSignUp)
 
-        // initialising Firebase auth object
-        auth = FirebaseAuth.getInstance()
 
         btnLogin.setOnClickListener {
             login()
@@ -41,7 +41,6 @@ class LoginActivity : AppCompatActivity() {
         tvRedirectSignUp.setOnClickListener {
             val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
-            overridePendingTransition(R.anim.slide_up, R.anim.slide_down)
             // using finish() to end the activity
             finish()
         }
@@ -54,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
         // function using Firebase auth object
         // On successful response Display a Toast
         if (email.isBlank() || pass.isBlank()) {
-            Toast.makeText(this, "Email and Password can't be blank", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Email / password can't be blank", Toast.LENGTH_SHORT).show()
             return
         }
         auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(this) {

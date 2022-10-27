@@ -16,13 +16,14 @@ import com.google.android.gms.location.LocationServices
 
 
 class MainActivity : AppCompatActivity() {
-    // Auth and Database
 
+    // Auth and Database
     private val firebase = FirebaseRepository()
     private val auth = firebase.getInstance()
     private val usersRef = firebase.dbRef("Users")
     private val currentUserId = firebase.currentUserUid()
     private val currentUserEmail = firebase.currentUserEmail()
+    private val isUserSignedIn = firebase.isUserSignedIn()
 
 
     // TextViews and EditTexts
@@ -41,6 +42,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
 
+    /* onCreate */
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +62,16 @@ class MainActivity : AppCompatActivity() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         // Check if user is signed in
-        checkLoggedIn()
+        if(isUserSignedIn){
+            tvEmail.text = "$currentUserEmail"
+        }
+        else{
+            Log.d("checkLoggedInTAG", "checkLoggedIn: User not logged in")
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            Toast.makeText(this,"Please sign in..", Toast.LENGTH_SHORT).show()
+            finish()
+        }
 
 
         // Category button
@@ -121,20 +132,5 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-    }
-
-    // Check if user is signed in
-    @SuppressLint("SetTextI18n")
-    private fun checkLoggedIn(){
-        if(firebase.currentUser() == null){
-            Log.d("checkLoggedInTAG", "checkLoggedIn: User not logged in")
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            Toast.makeText(this,"Please sign in..", Toast.LENGTH_SHORT).show()
-            finish()
-        }
-        else{
-            tvEmail.text = "$currentUserEmail"
-        }
     }
 }

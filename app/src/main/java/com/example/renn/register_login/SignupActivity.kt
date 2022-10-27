@@ -3,7 +3,6 @@ package com.example.renn.register_login
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.Location
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -18,20 +17,14 @@ import com.example.renn.Categories
 import com.example.renn.MainActivity
 import com.example.renn.R
 import com.example.renn.User
+import com.example.renn.helpers.EmailPassValidatorRepository
+import com.example.renn.helpers.FirebaseRepository
+import com.example.renn.helpers.MapsRepository
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.tasks.CancellationToken
-import com.google.android.gms.tasks.CancellationTokenSource
-import com.google.android.gms.tasks.OnTokenCanceledListener
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.ktx.Firebase
-import java.util.regex.Pattern
+
 
 @Suppress("RedundantIf")
 class SignupActivity : AppCompatActivity() {
@@ -46,16 +39,34 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var googleSignInBtn: SignInButton
 
     // Google Maps etc
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var userLoc: LatLng
+    private val mapsRepository = MapsRepository()
 
-    // create Firebase authentication object
-    private lateinit var auth: FirebaseAuth
-    private lateinit var database: DatabaseReference
+    private lateinit var userLocc: LatLng
+
+    /* By default, user have no permission until allowed */
+    private var haveLocationPermission : Boolean = false
+    private lateinit var showDialogAndGetPermission : Unit
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    // Firebase authentication/database
+    private val firebase = FirebaseRepository()
+    private val auth = firebase.getInstance()
+
+    private val usersRef = firebase.dbRef("Users")
+
+    // Email Pass Validators
+    private val validator = EmailPassValidatorRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+        // Check location permission
+        haveLocationPermission = mapsRepository.checkPermission(this)
+        userLocc = mapsRepository.getUserLocation(this, this, fusedLocationClient)
 
         // View Bindings
         etEmail = findViewById(R.id.etSEmailAddress)
@@ -66,25 +77,22 @@ class SignupActivity : AppCompatActivity() {
         tvSignupWelcome = findViewById(R.id.tvSignupWelcome)
         googleSignInBtn = findViewById(R.id.google_singIn_Btn)
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
-        // Default location
-        userLoc = LatLng(0.0, 0.0)
-
-        // Initialising auth object
-        auth = Firebase.auth
 
         // Sign Up button click listener
         btnSignUp.setOnClickListener {
+
             tvSignupWelcome.text = getString(R.string.sign_up)
             btnSignUp.text = getString(R.string.sign_up)
+
             // Show email and password editTexts
             etEmail.visibility = View.VISIBLE
             etPass.visibility = View.VISIBLE
             etConfPass.visibility = View.VISIBLE
 
-            if (!checkPermission()) {
-                permissionDialog()
+            // First check if Location permission is allowed
+            // then show alert dialog and ask for permission
+            if (!haveLocationPermission) {
+                showDialogAndGetPermission = mapsRepository.showDialogAndGetPermission(this, this@SignupActivity)
             }
             else{
                 signUpUser()
@@ -105,29 +113,18 @@ class SignupActivity : AppCompatActivity() {
         val pass = etPass.text.toString()
         val confirmPassword = etConfPass.text.toString()
 
-        @Suppress("RegExpRedundantEscape", "RegExpDuplicateCharacterInClass")
-        val emailAddressPattern = Pattern.compile(
-            "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
-                    "\\@" +
-                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
-                    "(" +
-                    "\\." +
-                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
-                    ")+"
-        )
-        // Is email correct
-        fun isValidString(str: String): Boolean{
-            return emailAddressPattern.matcher(str).matches()
-        }
+        val isEmailValid = validator.isValidEmail(email)
 
-        // check pass
+
+        // Check if fields are empty
         if (email.isBlank() || pass.isBlank() || confirmPassword.isBlank()) {
             Toast.makeText(this, "Enter email and password", Toast.LENGTH_SHORT).show()
             return
         }
 
-        if (!isValidString(email)){
-            Toast.makeText(this, "Invalid email format.", Toast.LENGTH_SHORT).show()
+        // Is email in valid format?
+        if (!isEmailValid){
+            Toast.makeText(this, "Invalid email format", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -142,26 +139,33 @@ class SignupActivity : AppCompatActivity() {
         // email and pass in it.
         auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(this) { signup ->
             if (signup.isSuccessful) {
+                // Get UserId
+                val userid = firebase.currentUserUid()
+                // Get User's location
+                val userLocation = userLocc
+
+
                 Toast.makeText(this, "Successfully signed Up", Toast.LENGTH_SHORT).show()
-                database = FirebaseDatabase.getInstance().getReference("Users")
-                val userid = FirebaseAuth.getInstance().currentUser!!.uid
                 val user = User(
                     email = email,
                     userid = userid,
                     workEnabled = false,
-                    locationLatitude = userLoc.latitude,
-                    locationLongitude = userLoc.longitude
+                    userLocation = userLocation
                 )
-                val userCategories = Categories(homeCat = false, taxiCat = false)
+                // User default categories
+                val userCategories = Categories(
+                    beautyCat = false,
+                    homeCat = false,
+                    taxiCat = false
+                )
 
-                // Add to User with details to Realtime Database
-                database.child(userid).setValue(user).addOnSuccessListener {
-                    // Set Users Location to db
-                    getLocation()
-                    Log.d("PushEmailToDB", "signUpUser: Saved to database!")
-                    database.child(userid).child("Categories").setValue(userCategories)
+                // Add to User to Realtime Database
+                usersRef.child(userid!!).setValue(user).addOnSuccessListener {
+                    Log.d("PushUserToDB", "PushUserToDB: User saved to database!")
+                    // Add user's default settings for categories to database
+                    usersRef.child(userid).child("Categories").setValue(userCategories)
                 }.addOnFailureListener {
-                    Log.d("PushEmailToDB", "signUpUser: Failed saving to database.")
+                    Log.d("PushUserToDB", "PushUserToDB: Failed saving to database.")
                 }
 
                 // Sign in
@@ -180,79 +184,6 @@ class SignupActivity : AppCompatActivity() {
             }
             else {
                 Toast.makeText(this, "Signup failed", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    // Check Permission
-    @SuppressLint("MissingPermission")
-    private fun checkPermission(): Boolean{
-        return if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-            && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            false
-        }
-        else{
-            true
-        }
-    }
-
-    // Get Permission
-    @SuppressLint("MissingPermission")
-    private fun getPermission(){
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(
-                android.Manifest.permission.ACCESS_FINE_LOCATION,
-                android.Manifest.permission.ACCESS_COARSE_LOCATION
-            ),
-            101
-        )
-    }
-
-    // Permission alert dialog
-    private fun permissionDialog(){
-        val dialogBuilder = AlertDialog.Builder(this)
-
-        // set message of alert dialog
-        dialogBuilder.setMessage("For app to work properly, please allow location permission!")
-            // if the dialog is cancelable
-            .setCancelable(false)
-            // positive button text and action
-            .setPositiveButton("Ok") { _, _ ->
-                getPermission()
-            }
-
-        // create dialog box
-        val alert = dialogBuilder.create()
-        // set title for alert dialog box
-        alert.setTitle("Location permission required!")
-        // show alert dialog
-        alert.show()
-    }
-
-    // Get user location and save it to User's table in db
-    @SuppressLint("MissingPermission")
-    private fun getLocation(){
-        val userid = FirebaseAuth.getInstance().currentUser!!.uid
-        @Suppress("DEPRECATION")
-        fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, object : CancellationToken() {
-            override fun onCanceledRequested(p0: OnTokenCanceledListener) = CancellationTokenSource().token
-            override fun isCancellationRequested() = false }).addOnSuccessListener { location: Location? ->
-            if (location == null)
-                Toast.makeText(this, "Cannot get location.", Toast.LENGTH_SHORT).show()
-            else {
-                userLoc = LatLng(location.latitude, location.longitude)
-                database.child(userid).child("locationLatitude").setValue(userLoc.latitude).addOnSuccessListener {
-                    Log.d("SettingUserLocation", "SettingUserLocation: Location Latitude saved to database!")
-                    database.child(userid).child("locationLongitude").setValue(userLoc.longitude)
-                        .addOnSuccessListener {
-                            Log.d("SettingUserLocation", "SettingUserLocation: Location Longitude saved to database!")
-                        }.addOnFailureListener {
-                            Log.d("SettingUserLocation", "SettingUserLocation: Location Longitude NOT SAVED!")
-                        }.addOnFailureListener {
-                            Log.d("SettingUserLocation", "SettingUserLocation: Location Latitude NOT SAVED!")
-                        }
-                }
             }
         }
     }
