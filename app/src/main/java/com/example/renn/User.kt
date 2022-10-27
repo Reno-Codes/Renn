@@ -16,3 +16,11 @@ data class Categories(
     val homeCat: Boolean? = null,
     val taxiCat: Boolean? = null
 )
+
+data class allCategories(
+    val numbersMap: Map<String, String> = mapOf(
+        "Beauty" to "Schedule any beauty session",
+        "Transportation" to "Get a ride for you or your things",
+        "Construction Works" to "Get things made, built or fixed"
+        )
+)

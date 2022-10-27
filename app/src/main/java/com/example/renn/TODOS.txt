@@ -10,3 +10,10 @@ Activities
 3.2 STAO NA SettingsActivity.kt
 
 4. TODO (Correct all activities to use reusable functions)
+
+
+5. TODO( Use this for CategoryActivity displaying etc. and try to implement it for user sign up as well )
+        //val allCategories = allCategories()
+        //for (category in allCategories.numbersMap){
+        //    println("Category: ${category.key}\nValue: ${category.value}")
+        //}

@@ -222,7 +222,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12sp"
-                            android:text="Get things built or fixed"
+                            android:text="Get things made, built or fixed"
                             android:textColor="@color/description_color_white" />
                     </LinearLayout>
                 </LinearLayout>
