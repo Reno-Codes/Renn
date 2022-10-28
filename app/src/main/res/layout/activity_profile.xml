@@ -94,18 +94,57 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:paddingBottom="25dp"
-                android:text="user address"
+                android:text="address"
                 android:textSize="15sp"
                 android:textColor="@color/dark_grey"/>
+
+            <TextView
+                android:id="@+id/tvRadius"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:paddingBottom="25dp"
+                android:text="radius"
+                android:textSize="15sp"
+                android:textColor="@color/dark_grey"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:text="@string/circle_radius_kilometers"
+                    android:textSize="15sp"
+                    android:textColor="@color/dark_grey"/>
+
+                <EditText
+                    android:id="@+id/etRadius"
+                    android:layout_width="110dp"
+                    android:layout_height="48dp"
+                    android:gravity="center"
+                    android:inputType="numberDecimal"
+                    android:hint="2.5"
+                    android:maxLength="6"
+                    android:textColor="@color/dark_grey"/>
+
+            </LinearLayout>
+
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/updateLocationBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:textColor="@color/white"
                 map:cornerRadius="15dp"
-                android:text="Update location">
+                android:text="@string/update_location">
             </com.google.android.material.button.MaterialButton>
 
 

@@ -7,6 +7,7 @@ data class User(
     val email: String? = null,
     val userid: String? = null,
     val userLocation: LatLng? = null,
+    val userCircleRadius: Double? = null,
     val workEnabled: Boolean? = false
 )
 

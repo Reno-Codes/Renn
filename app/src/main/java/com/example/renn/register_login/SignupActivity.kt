@@ -111,6 +111,7 @@ class SignupActivity : AppCompatActivity() {
         val confirmPassword = etConfPass.text.toString()
 
         val isEmailValid = validator.isValidEmail(email)
+        val isPasswordValid = validator.isValidPassword(pass)
 
 
         // Check if fields are empty
@@ -122,6 +123,13 @@ class SignupActivity : AppCompatActivity() {
         // Is email in valid format?
         if (!isEmailValid){
             Toast.makeText(this, "Invalid email format", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // Is password strong enough?
+        if (!isPasswordValid){
+            Toast.makeText(this, "Try again", Toast.LENGTH_SHORT).show()
+            validator.passwordAlert(this)
             return
         }
 
@@ -142,8 +150,9 @@ class SignupActivity : AppCompatActivity() {
                 val user = User(
                     email = email,
                     userid = userid,
-                    workEnabled = false,
-                    userLocation = LatLng(userLoc.latitude, userLoc.longitude)
+                    userLocation = LatLng(userLoc.latitude, userLoc.longitude),
+                    userCircleRadius = 1.3, // default kilometer
+                    workEnabled = false
                 )
                 // User default categories
                 val userCategories = Categories(

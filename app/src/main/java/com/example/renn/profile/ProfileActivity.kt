@@ -6,9 +6,10 @@ import android.location.Address
 import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import com.example.renn.R
 import com.example.renn.helpers.FirebaseRepository
 import com.example.renn.helpers.MapsRepository
@@ -24,6 +25,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import de.hdodenhof.circleimageview.CircleImageView
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.*
 
 class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -44,6 +47,9 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var ivProfileImage: CircleImageView
     private lateinit var tvAddress: TextView
     private lateinit var updateLocationBtn: MaterialButton
+    private lateinit var tvRadius: TextView
+    private lateinit var etRadius: EditText
+//    private lateinit var seek: SeekBar
 
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +63,8 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
         ivProfileImage = findViewById(R.id.ivProfileImage)
         tvAddress = findViewById(R.id.tvAddress)
         updateLocationBtn = findViewById(R.id.updateLocationBtn)
+        tvRadius = findViewById(R.id.tvRadius)
+        etRadius = findViewById(R.id.etRadius)
 
         // FusedLocationProviderClient
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -66,9 +74,52 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
             finish()
         }
 
+
+//        seek = findViewById(R.id.radiusSeekBar)
+//        seek.setOnSeekBarChangeListener(object :
+//            SeekBar.OnSeekBarChangeListener {
+//            @SuppressLint("SetTextI18n")
+//            override fun onProgressChanged(seek: SeekBar,
+//                                           progress: Int, fromUser: Boolean) {
+//                tvRadius.text = "${seek.progress} km"
+//            }
+//
+//            override fun onStartTrackingTouch(seek: SeekBar) {
+//                tvRadius.text = "${seek.progress} km"
+//            }
+//
+//            override fun onStopTrackingTouch(seek: SeekBar) {
+//                tvRadius.text = "${seek.progress} km"
+//            }
+//        })
+
+        /* XML */
+//        <SeekBar
+//        android:id="@+id/radiusSeekBar"
+//        android:layout_width="match_parent"
+//        android:layout_height="0dp"
+//        android:layout_weight="1"
+//        android:min="0"
+//        android:max="1000"/>
+
+
         updateLocationBtn.setOnClickListener {
+            if (etRadius.text.isNotEmpty()){
+                if (etRadius.text.toString().toDouble() < 0.5){
+                    etRadius.text.clear()
+                    etRadius.hint = "min 0.5"
+                }
+                else if (etRadius.text.toString().toDouble() > 1000){
+                    etRadius.text.clear()
+                    etRadius.hint = "max 1000"
+                }
+                else{
+                    // Set Users Location to db and update map
+                    mapsRepository.getSetUserLocationAndUpdateMap(this, userid!!, usersRef, fusedLocationClient, mMap, tvAddress, tvRadius, etRadius)
+                }
+            }
             // Set Users Location to db and update map
-            mapsRepository.getSetUserLocationAndUpdateMap(this, userid!!, usersRef, fusedLocationClient, mMap, tvAddress)
+            mapsRepository.getSetUserLocationAndUpdateMap(this, userid!!, usersRef, fusedLocationClient, mMap, tvAddress, tvRadius, etRadius)
         }
 
 
@@ -80,7 +131,7 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
 
-    @SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission", "SetTextI18n")
     override fun onMapReady(googleMap: GoogleMap) {
         tvAddress = findViewById(R.id.tvAddress)
         mMap = googleMap
@@ -88,7 +139,6 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
         val userid = FirebaseAuth.getInstance().currentUser!!.uid
 
         var currentLocation: LatLng
-
 
         mMap.setMapStyle(
             MapStyleOptions.loadRawResourceStyle(this, R.raw.google_style)
@@ -104,6 +154,19 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                 val snapshot = task.result
                 val userLat = snapshot.child("userLocation").child("latitude").getValue(Double::class.java)
                 val userLon = snapshot.child("userLocation").child("longitude").getValue(Double::class.java)
+                var userCircleRadius = snapshot.child("userCircleRadius").getValue(Double::class.java)
+                if (userCircleRadius!! < 0.5) {
+                    userCircleRadius = 0.5
+                    uidRef.child("userCircleRadius").setValue(userCircleRadius).addOnCompleteListener {
+                        Log.d("Radius 0.5", "Radius 0.5: Minimum radius set to user's db ")
+                    }
+                }
+                else if (userCircleRadius < 1.0){
+                    tvRadius.text = "Radius: ${userCircleRadius * 1000} meters"
+                }
+                else{
+                    tvRadius.text = "Radius: $userCircleRadius km"
+                }
 
                 currentLocation = LatLng(userLat!!, userLon!!)
 
@@ -112,7 +175,7 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                 // Instantiates a new CircleOptions object and defines the center, radius and attrs
                 val circleOptions = CircleOptions()
                     .center(currentLocation)
-                    .radius(1000.0) // In meters
+                    .radius(userCircleRadius * 1000)
                     .strokeWidth(10f)
                     .strokeColor(Color.argb(60,4, 83, 194))
                     .fillColor(Color.argb(50,4, 83, 194))
@@ -150,10 +213,68 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                 // Move camera to user's location
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, zoomLevel))
 
+
+
+                // Update Circle
+                etRadius.addTextChangedListener(object : TextWatcher {
+                    // Initialize a new circle
+                    var circleOptionsNew = CircleOptions()
+
+                    // Convert to meters or kilometers
+                    fun convertMetersKm(radius: String): String{
+                        val radiusString = if (radius.toDouble() < 1.0){
+                            "Radius: ${radius.toDouble() * 1000} meters"
+                        }
+                        else{
+                            "Radius: ${radius.toDouble()} km"
+                        }
+                        return radiusString
+                    }
+
+                    override fun afterTextChanged(s: Editable) {
+
+                        // Check if radius editText is empty
+                        if (etRadius.text.isNotEmpty()){
+
+                            // Check if radius editText is greater then minimum radius 0.5
+                            if (etRadius.text.toString().toDouble() > 0.4){
+                                val radiusToDouble = etRadius.text.toString().trim().toDouble()
+                                // Round to 2 decimals
+                                val roundRadius = BigDecimal(radiusToDouble).setScale(2, RoundingMode.HALF_EVEN).toDouble()
+                                tvRadius.text = convertMetersKm(roundRadius.toString())
+
+                                circleOptionsNew.center(currentLocation)
+                                    .radius(etRadius.text.toString().toDouble() * 1000)
+                                    .strokeWidth(10f)
+                                    .strokeColor(Color.argb(70,4, 194, 83))
+                                    .fillColor(Color.argb(60,4, 194, 83))
+                                mMap.clear()
+                                mMap.addCircle(circleOptionsNew)
+                                mMap.addMarker(MarkerOptions().position(currentLocation).title(getAddressInfo()))
+                            }
+                        }
+                        else{
+                            val radiusToDouble = userCircleRadius
+                            // Round to 2 decimals
+                            val roundRadius = BigDecimal(radiusToDouble).setScale(2, RoundingMode.HALF_EVEN).toDouble()
+                            tvRadius.text = convertMetersKm(roundRadius.toString())
+                            mMap.clear()
+                            mMap.addCircle(circleOptions)
+                            mMap.addMarker(MarkerOptions().position(currentLocation).title(getAddressInfo()))
+                        }
+                    }
+
+                    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                        // do some work?
+                    }
+                    override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                        // do some work?
+                    }
+                })
+
             } else {
                 Log.d("TAG", task.exception!!.message!!) //Don't ignore potential errors!
             }
         }
-
     }
 }

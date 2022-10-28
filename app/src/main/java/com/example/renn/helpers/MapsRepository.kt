@@ -9,6 +9,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.util.Log
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -26,6 +27,8 @@ import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.google.firebase.database.DatabaseReference
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.util.*
 
 class MapsRepository {
@@ -103,8 +106,17 @@ class MapsRepository {
 
 
     // Get user location and save it to User's table in db AND UPDATE MAP
-    @SuppressLint("MissingPermission")
-    fun getSetUserLocationAndUpdateMap(context: Context, userid: String, usersRef: DatabaseReference, fusedLocationClient: FusedLocationProviderClient, googleMap: GoogleMap, tvAddress: TextView){
+    @SuppressLint("MissingPermission", "SetTextI18n")
+    fun getSetUserLocationAndUpdateMap(
+        context: Context,
+        userid: String,
+        usersRef: DatabaseReference,
+        fusedLocationClient: FusedLocationProviderClient,
+        googleMap: GoogleMap,
+        tvAddress: TextView,
+        tvRadius: TextView,
+        etRadius: EditText
+    ){
         @Suppress("DEPRECATION")
         fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, object : CancellationToken() {
             override fun onCanceledRequested(p0: OnTokenCanceledListener) = CancellationTokenSource().token
@@ -115,6 +127,16 @@ class MapsRepository {
                 val userLoc = LatLng(location.latitude, location.longitude)
                 usersRef.child(userid).child("userLocation").setValue(userLoc).addOnSuccessListener {
 
+                    if (etRadius.text.isNotEmpty()){
+                        val radiusToDouble = etRadius.text.toString().trim().toDouble()
+                        // Round to 2 decimals
+                        val roundRadius = BigDecimal(radiusToDouble).setScale(2, RoundingMode.HALF_EVEN).toDouble()
+
+                        usersRef.child(userid).child("userCircleRadius").setValue(roundRadius)
+                    }
+
+                    // Clear map
+                    googleMap.clear()
                     // Update Map
                     var currentLocation: LatLng
 
@@ -130,19 +152,36 @@ class MapsRepository {
                         if (task.isSuccessful) {
                             // Get user's location LatLng from db
                             val snapshot = task.result
-                            val userLat = snapshot.child("userLocation").child("latitude")
-                                .getValue(Double::class.java)
-                            val userLon = snapshot.child("userLocation").child("longitude")
-                                .getValue(Double::class.java)
+                            val userLat = snapshot.child("userLocation").child("latitude").getValue(Double::class.java)
+                            val userLon = snapshot.child("userLocation").child("longitude").getValue(Double::class.java)
+                            var userCircleRadius = snapshot.child("userCircleRadius").getValue(Double::class.java)
+                            if (userCircleRadius!! < 0.5) {
+                                userCircleRadius = 0.5
+                                uidRef.child("userCircleRadius").setValue(userCircleRadius).addOnCompleteListener {
+                                    Log.d("Radius 0.5", "Radius 0.5: Minimum radius set to user's db ")
+                                }
+                            }
+                            else if (userCircleRadius < 1.0){
+                                tvRadius.text = "Radius: ${userCircleRadius * 1000} meters"
+                            }
+
+                            else if (userCircleRadius > 1000){
+                                userCircleRadius = 1000.0
+                                uidRef.child("userCircleRadius").setValue(userCircleRadius).addOnCompleteListener {
+                                    Log.d("Radius 1000", "Radius 1000: Maximum radius (1000 km) set to user's db ")
+                                }
+                            }
+
+                            else{
+                                tvRadius.text = "Radius: $userCircleRadius km"
+                            }
 
                             currentLocation = LatLng(userLat!!, userLon!!)
 
-                            // Default zoom level
-                            val zoomLevel = 14.5f
                             // Instantiates a new CircleOptions object and defines the center, radius and attrs
                             val circleOptions = CircleOptions()
                                 .center(currentLocation)
-                                .radius(1000.0) // In meters
+                                .radius(userCircleRadius * 1000)
                                 .strokeWidth(10f)
                                 .strokeColor(Color.argb(60, 4, 83, 194))
                                 .fillColor(Color.argb(50, 4, 83, 194))
@@ -184,11 +223,11 @@ class MapsRepository {
                             )
                             // Move camera to user's location
                             googleMap.moveCamera(
-                                CameraUpdateFactory.newLatLngZoom(
-                                    currentLocation,
-                                    zoomLevel
-                                )
+                                CameraUpdateFactory.newLatLng(currentLocation)
                             )
+
+
+                            Toast.makeText(context, "Location updated", Toast.LENGTH_SHORT).show()
 
                         } else {
                             Log.d(
