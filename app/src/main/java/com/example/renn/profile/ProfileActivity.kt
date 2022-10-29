@@ -4,26 +4,19 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import com.example.renn.R
-import com.example.renn.helpers.FirebaseRepository
-import com.example.renn.helpers.MapsRepository
+import com.example.renn.helpers.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.CircleOptions
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.google.android.material.button.MaterialButton
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import de.hdodenhof.circleimageview.CircleImageView
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -32,15 +25,8 @@ import java.util.*
 class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
-    private lateinit var database: DatabaseReference
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    private val mapsRepository = MapsRepository()
-
-    // Firebase authentication/database
-    private val firebase = FirebaseRepository()
-
-    private val usersRef = firebase.dbRef("Users")
 
     // Bindings
     private lateinit var backBtn: ImageView
@@ -56,7 +42,6 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-        val userid = firebase.currentUserUid()
 
         // Find views
         backBtn = findViewById(R.id.backBtn)
@@ -115,11 +100,11 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                 }
                 else{
                     // Set Users Location to db and update map
-                    mapsRepository.getSetUserLocationAndUpdateMap(this, userid!!, usersRef, fusedLocationClient, mMap, tvAddress, tvRadius, etRadius)
+                    updateCurrentUserLocationAndUpdateMap(this, fusedLocationClient, mMap, tvAddress, tvRadius, etRadius)
                 }
             }
             // Set Users Location to db and update map
-            mapsRepository.getSetUserLocationAndUpdateMap(this, userid!!, usersRef, fusedLocationClient, mMap, tvAddress, tvRadius, etRadius)
+            updateCurrentUserLocationAndUpdateMap(this, fusedLocationClient, mMap, tvAddress, tvRadius, etRadius)
         }
 
 
@@ -133,10 +118,19 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
 
     @SuppressLint("MissingPermission", "SetTextI18n")
     override fun onMapReady(googleMap: GoogleMap) {
+        // User Id table ref
+        val currentUserIdRef = database
+            .child("Users")
+            .child(auth.currentUser!!.uid)
+        // Current user circle radius ref
+        val currentUserCircleRadiusRef = database
+            .child("Users")
+            .child(auth.currentUser!!.uid).
+            child("userCircleRadius")
+
+
         tvAddress = findViewById(R.id.tvAddress)
         mMap = googleMap
-        database = FirebaseDatabase.getInstance().getReference("Users")
-        val userid = FirebaseAuth.getInstance().currentUser!!.uid
 
         var currentLocation: LatLng
 
@@ -145,10 +139,8 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
         )
 
 
-        // Getting the location
-        val uidRef = database.child(userid)
 
-        uidRef.get().addOnCompleteListener { task ->
+        currentUserIdRef.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 // Get user's location LatLng from db
                 val snapshot = task.result
@@ -157,7 +149,7 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                 var userCircleRadius = snapshot.child("userCircleRadius").getValue(Double::class.java)
                 if (userCircleRadius!! < 0.5) {
                     userCircleRadius = 0.5
-                    uidRef.child("userCircleRadius").setValue(userCircleRadius).addOnCompleteListener {
+                    currentUserCircleRadiusRef.setValue(userCircleRadius).addOnCompleteListener {
                         Log.d("Radius 0.5", "Radius 0.5: Minimum radius set to user's db ")
                     }
                 }
@@ -230,6 +222,15 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                         }
                         return radiusString
                     }
+
+                    // TODO
+                    var bounds: LatLngBounds = mMap.projection.visibleRegion.latLngBounds
+                    var llNeLat = bounds.northeast.latitude
+                    var llSwLat = bounds.southwest.latitude
+                    var llNeLng = bounds.northeast.longitude
+                    var llSwLng = bounds.southwest.longitude
+
+
 
                     override fun afterTextChanged(s: Editable) {
 

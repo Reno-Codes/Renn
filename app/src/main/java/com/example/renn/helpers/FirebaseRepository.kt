@@ -2,37 +2,27 @@ package com.example.renn.helpers
 
 import android.annotation.SuppressLint
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
-open class FirebaseRepository {
-    // Current instance
-    fun getInstance() = FirebaseAuth.getInstance()
 
-    /* -- CURRENT USER STUFF -- */
-    // Current user
-    fun currentUser() = FirebaseAuth.getInstance().currentUser
+val auth : FirebaseAuth = FirebaseAuth.getInstance()
+val database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
-    // Current user UID
-    fun currentUserUid() = FirebaseAuth.getInstance().currentUser?.uid
 
-    // Current user Email
-    fun currentUserEmail() = FirebaseAuth.getInstance().currentUser?.email
-
-    // Check if user is signed in
-    @SuppressLint("SetTextI18n")
-    @Suppress("RedundantIf")
-    fun isUserSignedIn(): Boolean{
-        return if(currentUser() == null){
-            false
-        } else{
-            true
-        }
+// Check if user is signed in
+@SuppressLint("SetTextI18n")
+@Suppress("RedundantIf")
+fun isUserSignedIn(): Boolean{
+    return if(FirebaseAuth.getInstance().currentUser != null){
+        true
+    } else{
+        false
     }
-
-    /* -- FIREBASE STUFF -- */
-    // Database getReference()
-    fun dbRef(path: String?) = FirebaseDatabase.getInstance().getReference(path!!)
-
-
-
 }
+
+/* -- FIREBASE STUFF -- */
+// Database getReference()
+fun dbRef(path: String?) = FirebaseDatabase.getInstance().getReference(path!!)
+
+

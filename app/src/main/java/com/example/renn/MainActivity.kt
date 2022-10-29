@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import com.example.renn.categories.CategoryActivity
-import com.example.renn.helpers.FirebaseRepository
+import com.example.renn.helpers.*
 import com.example.renn.profile.ProfileActivity
 import com.example.renn.register_login.LoginActivity
 import com.example.renn.settings.SettingsActivity
@@ -16,15 +16,6 @@ import com.google.android.gms.location.LocationServices
 
 
 class MainActivity : AppCompatActivity() {
-
-    // Auth and Database
-    private val firebase = FirebaseRepository()
-    private val auth = firebase.getInstance()
-    private val usersRef = firebase.dbRef("Users")
-    private val currentUserId = firebase.currentUserUid()
-    private val currentUserEmail = firebase.currentUserEmail()
-    private val isUserSignedIn = firebase.isUserSignedIn()
-
 
     // TextViews and EditTexts
     private lateinit var tvEmail: TextView
@@ -48,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+
         // Bind TextViews and EditTexts
         tvEmail = findViewById(R.id.tvEmail)
         etJob = findViewById(R.id.jobEt)
@@ -61,8 +53,10 @@ class MainActivity : AppCompatActivity() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
+
         // Check if user is signed in
-        if(isUserSignedIn){
+        if(isUserSignedIn()){
+            val currentUserEmail = auth.currentUser?.email
             tvEmail.text = "$currentUserEmail"
         }
         else{
@@ -72,6 +66,9 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this,"Please sign in..", Toast.LENGTH_SHORT).show()
             finish()
         }
+
+        val currentUserId = auth.currentUser?.uid
+        val usersRef = database.child("Users")
 
 
         // Category button

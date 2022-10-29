@@ -9,7 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.renn.MainActivity
 import com.example.renn.R
-import com.example.renn.helpers.FirebaseRepository
+import com.example.renn.helpers.auth
 
 class LoginActivity : AppCompatActivity() {
 
@@ -18,9 +18,6 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var etPass: EditText
     private lateinit var btnLogin: Button
 
-    // Auth and Database
-    private val firebase = FirebaseRepository()
-    private val auth = firebase.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

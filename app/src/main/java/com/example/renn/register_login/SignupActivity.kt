@@ -14,9 +14,7 @@ import com.example.renn.Categories
 import com.example.renn.MainActivity
 import com.example.renn.R
 import com.example.renn.User
-import com.example.renn.helpers.EmailPassValidatorRepository
-import com.example.renn.helpers.FirebaseRepository
-import com.example.renn.helpers.MapsRepository
+import com.example.renn.helpers.*
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -35,20 +33,11 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var tvSignupWelcome: TextView
     private lateinit var googleSignInBtn: SignInButton
 
-    // Google Maps etc
-    private val mapsRepository = MapsRepository()
 
     private lateinit var userLoc: LatLng
 
-    private lateinit var showDialogAndGetPermission : Unit
-
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    // Firebase authentication/database
-    private val firebase = FirebaseRepository()
-    private val auth = firebase.getInstance()
-
-    private val usersRef = firebase.dbRef("Users")
 
     // Email Pass Validators
     private val validator = EmailPassValidatorRepository()
@@ -88,8 +77,8 @@ class SignupActivity : AppCompatActivity() {
 
             // First check if Location permission is allowed
             // then show alert dialog and ask for permission
-            if (!mapsRepository.checkPermission(this)) {
-                showDialogAndGetPermission = mapsRepository.showDialogAndGetPermission(this, this@SignupActivity)
+            if (!checkPermission(this)) {
+                showDialogAndGetPermission(this, this@SignupActivity)
             }
             else{
                 signUpUser()
@@ -145,7 +134,7 @@ class SignupActivity : AppCompatActivity() {
         auth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(this) { signup ->
             if (signup.isSuccessful) {
                 // Get UserId
-                val userid = firebase.currentUserUid()
+                val userid = auth.currentUser!!.uid
                 Toast.makeText(this, "Successfully signed Up", Toast.LENGTH_SHORT).show()
                 val user = User(
                     email = email,
@@ -162,9 +151,12 @@ class SignupActivity : AppCompatActivity() {
                 )
 
                 // Add to User to Realtime Database
-                usersRef.child(userid!!).setValue(user).addOnSuccessListener {
+                val usersRef = database
+                    .child("Users")
+
+                usersRef.child(userid).setValue(user).addOnSuccessListener {
                     // Set Users Current Location to db
-                    mapsRepository.getSetUserCurrentLocation(this, userid, usersRef, fusedLocationClient)
+                    updateCurrentUserLocation(this, fusedLocationClient)
                     Log.d("PushUserToDB", "PushUserToDB: User saved to database!")
                     // Add user's default settings for categories to database
                     usersRef.child(userid).child("Categories").setValue(userCategories)
