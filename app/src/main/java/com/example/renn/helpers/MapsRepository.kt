@@ -19,7 +19,6 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.Circle
 import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MapStyleOptions
@@ -264,12 +263,17 @@ fun updateCurrentUserLocationAndUpdateMap(
     }
 }
 
-// TODO
-fun getZoomLevel(circle: Circle): Float {
+//                    var bounds: LatLngBounds = mMap.projection.visibleRegion.latLngBounds
+//                    var llNeLat = bounds.northeast.latitude
+//                    var llSwLat = bounds.southwest.latitude
+//                    var llNeLng = bounds.northeast.longitude
+//                    var llSwLng = bounds.southwest.longitude
+
+// TODO: needs to be corrected to match different screen sizes
+fun getZoomLevel(radius: Double): Float {
     val zoomLevel: Float
 
-    val radius: Double = circle.radius
-    val scale: Double = radius / 500
+    val scale: Double = radius / 0.22
 
     zoomLevel = (16 - ln(scale) / ln(2.0)).toFloat()
 

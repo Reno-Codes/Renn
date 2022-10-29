@@ -163,7 +163,7 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                 currentLocation = LatLng(userLat!!, userLon!!)
 
                 // Default zoom level
-                val zoomLevel = 14.5f
+                val zoomLevel = userCircleRadius
                 // Instantiates a new CircleOptions object and defines the center, radius and attrs
                 val circleOptions = CircleOptions()
                     .center(currentLocation)
@@ -203,7 +203,7 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                 // Add Marker
                 mMap.addMarker(MarkerOptions().position(currentLocation).title(getAddressInfo()))
                 // Move camera to user's location
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, zoomLevel))
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, getZoomLevel(zoomLevel)), 1000, null)
 
 
 
@@ -223,15 +223,8 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                         return radiusString
                     }
 
-                    // TODO
-                    var bounds: LatLngBounds = mMap.projection.visibleRegion.latLngBounds
-                    var llNeLat = bounds.northeast.latitude
-                    var llSwLat = bounds.southwest.latitude
-                    var llNeLng = bounds.northeast.longitude
-                    var llSwLng = bounds.southwest.longitude
 
-
-
+                    // On radius text changed
                     override fun afterTextChanged(s: Editable) {
 
                         // Check if radius editText is empty
@@ -244,6 +237,9 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                                 val roundRadius = BigDecimal(radiusToDouble).setScale(2, RoundingMode.HALF_EVEN).toDouble()
                                 tvRadius.text = convertMetersKm(roundRadius.toString())
 
+                                var newZoom = 0f
+
+
                                 circleOptionsNew.center(currentLocation)
                                     .radius(etRadius.text.toString().toDouble() * 1000)
                                     .strokeWidth(10f)
@@ -252,6 +248,7 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                                 mMap.clear()
                                 mMap.addCircle(circleOptionsNew)
                                 mMap.addMarker(MarkerOptions().position(currentLocation).title(getAddressInfo()))
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, getZoomLevel(etRadius.text.toString().toDouble())), 1000, null)
                             }
                         }
                         else{
