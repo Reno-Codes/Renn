@@ -9,6 +9,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.util.Log
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -25,6 +26,7 @@ import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.google.android.libraries.places.api.model.RectangularBounds
+import com.google.android.material.button.MaterialButton
 import com.google.maps.android.SphericalUtil
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -278,23 +280,26 @@ fun getZoomLevel(radius: Double): Float {
 
 // Check is input radius correct (min 0.5 km - max 1000 km)
 @SuppressLint("SetTextI18n")
-fun correctInputRadius(etRadius: EditText, tvRadius: TextView): Boolean{
+fun correctInputRadius(etRadius: EditText, tvRadius: TextView, updateLocationBtn: MaterialButton): Boolean{
     var isCorrectRadius = true
     if (etRadius.text.toString().toDouble() < 0.5){
         etRadius.setTextColor(Color.RED)
         tvRadius.setTextColor(Color.RED)
         tvRadius.text = "Minimum radius is 0.5 km"
+        updateLocationBtn.isEnabled = false
         isCorrectRadius = false
     }
     else if (etRadius.text.toString().toDouble() > 1000){
         etRadius.setTextColor(Color.RED)
         tvRadius.setTextColor(Color.RED)
         tvRadius.text = "Maximum radius is 1000 km"
+        updateLocationBtn.isEnabled = false
         isCorrectRadius = false
     }
     else{
         etRadius.setTextColor(Color.parseColor("#353531"))
         tvRadius.setTextColor(Color.parseColor("#353531"))
+        updateLocationBtn.isEnabled = true
     }
     return isCorrectRadius
 }

@@ -94,7 +94,7 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             else{
                 if (etRadius.text.isNotEmpty()){
-                    if (!correctInputRadius(etRadius, tvRadius)){
+                    if (!correctInputRadius(etRadius, tvRadius, updateLocationBtn)){
                         return@setOnClickListener
                     }
                     else{
@@ -229,7 +229,7 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                         if (etRadius.text.isNotEmpty()){
 
                             // Check if radius editText is greater then minimum radius 0.5
-                            if (correctInputRadius(etRadius, tvRadius)){
+                            if (correctInputRadius(etRadius, tvRadius, updateLocationBtn)){
                                 // Round to 2 decimals
                                 val roundRadius = BigDecimal(etRadius.text.toString().trim().toDouble()).setScale(2, RoundingMode.HALF_EVEN).toDouble()
                                 tvRadius.text = convertMetersKm(roundRadius.toString())
@@ -247,8 +247,9 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                             }
                         }
                         else{
-                            // Round to 2 decimals
                             tvRadius.setTextColor(Color.parseColor("#353531"))
+                            updateLocationBtn.isEnabled = true
+                            // Round to 2 decimals
                             val roundRadius = BigDecimal(userCircleRadius).setScale(2, RoundingMode.HALF_EVEN).toDouble()
                             tvRadius.text = convertMetersKm(roundRadius.toString())
                             mMap.clear()
