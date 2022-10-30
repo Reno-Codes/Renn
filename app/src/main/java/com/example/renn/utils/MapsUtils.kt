@@ -1,4 +1,4 @@
-package com.example.renn.helpers
+package com.example.renn.utils
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -14,22 +14,23 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.text.set
 import com.example.renn.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.CircleOptions
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.google.android.gms.tasks.CancellationToken
 import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
+import com.google.android.libraries.places.api.model.RectangularBounds
+import com.google.maps.android.SphericalUtil
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
 import kotlin.math.ln
+import kotlin.math.sqrt
 
 
 // Check permission - returns Boolean
@@ -263,19 +264,59 @@ fun updateCurrentUserLocationAndUpdateMap(
     }
 }
 
-//                    var bounds: LatLngBounds = mMap.projection.visibleRegion.latLngBounds
-//                    var llNeLat = bounds.northeast.latitude
-//                    var llSwLat = bounds.southwest.latitude
-//                    var llNeLng = bounds.northeast.longitude
-//                    var llSwLng = bounds.southwest.longitude
 
-// TODO: needs to be corrected to match different screen sizes
+// Currently working
 fun getZoomLevel(radius: Double): Float {
     val zoomLevel: Float
 
-    val scale: Double = radius / 0.22
+    val scale: Double = (radius * 1000) / 500
 
-    zoomLevel = (16 - ln(scale) / ln(2.0)).toFloat()
+    zoomLevel = (15 - ln(scale) / ln(2.0)).toFloat()
 
-    return zoomLevel + .5f
+    return zoomLevel
+}
+
+// Check is input radius correct (min 0.5 km - max 1000 km)
+@SuppressLint("SetTextI18n")
+fun correctInputRadius(etRadius: EditText, tvRadius: TextView): Boolean{
+    var isCorrectRadius = true
+    if (etRadius.text.toString().toDouble() < 0.5){
+        etRadius.setTextColor(Color.RED)
+        tvRadius.setTextColor(Color.RED)
+        tvRadius.text = "Minimum radius is 0.5 km"
+        isCorrectRadius = false
+    }
+    else if (etRadius.text.toString().toDouble() > 1000){
+        etRadius.setTextColor(Color.RED)
+        tvRadius.setTextColor(Color.RED)
+        tvRadius.text = "Maximum radius is 1000 km"
+        isCorrectRadius = false
+    }
+    else{
+        etRadius.setTextColor(Color.parseColor("#353531"))
+        tvRadius.setTextColor(Color.parseColor("#353531"))
+    }
+    return isCorrectRadius
+}
+
+
+fun getBounds(map: GoogleMap): List<Double> {
+    val bounds: LatLngBounds = map.projection.visibleRegion.latLngBounds
+    val boundNeLat = bounds.northeast.latitude
+    val boundSwLat = bounds.southwest.latitude
+    val boundNeLng = bounds.northeast.longitude
+    val boundSwLng = bounds.southwest.longitude
+
+    return listOf(boundNeLat, boundNeLng, boundSwLat, boundSwLng)
+}
+
+
+fun circleBounds(radius: Double, location: LatLng): RectangularBounds{
+// optional: to get distance to circle radius, not the edge
+    val distance = radius * sqrt(2.0)
+
+    val ne = SphericalUtil.computeOffset(location, distance, 45.0)
+    val sw = SphericalUtil.computeOffset(location, distance, 225.0)
+
+    return RectangularBounds.newInstance(ne, sw)
 }

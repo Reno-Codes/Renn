@@ -11,7 +11,7 @@ import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.renn.R
-import com.example.renn.helpers.*
+import com.example.renn.utils.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
@@ -89,22 +89,22 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
 
 
         updateLocationBtn.setOnClickListener {
-            if (etRadius.text.isNotEmpty()){
-                if (etRadius.text.toString().toDouble() < 0.5){
-                    etRadius.text.clear()
-                    etRadius.hint = "min 0.5"
-                }
-                else if (etRadius.text.toString().toDouble() > 1000){
-                    etRadius.text.clear()
-                    etRadius.hint = "max 1000"
-                }
-                else{
-                    // Set Users Location to db and update map
-                    updateCurrentUserLocationAndUpdateMap(this, fusedLocationClient, mMap, tvAddress, tvRadius, etRadius)
-                }
+            if (!checkPermission(this)) {
+                showDialogAndGetPermission(this, this@ProfileActivity)
             }
-            // Set Users Location to db and update map
-            updateCurrentUserLocationAndUpdateMap(this, fusedLocationClient, mMap, tvAddress, tvRadius, etRadius)
+            else{
+                if (etRadius.text.isNotEmpty()){
+                    if (!correctInputRadius(etRadius, tvRadius)){
+                        return@setOnClickListener
+                    }
+                    else{
+                        // Set Users Location to db and update map
+                        updateCurrentUserLocationAndUpdateMap(this, fusedLocationClient, mMap, tvAddress, tvRadius, etRadius)
+                    }
+                }
+                // Set Users Location to db and update map
+                updateCurrentUserLocationAndUpdateMap(this, fusedLocationClient, mMap, tvAddress, tvRadius, etRadius)
+            }
         }
 
 
@@ -162,8 +162,6 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 currentLocation = LatLng(userLat!!, userLon!!)
 
-                // Default zoom level
-                val zoomLevel = userCircleRadius
                 // Instantiates a new CircleOptions object and defines the center, radius and attrs
                 val circleOptions = CircleOptions()
                     .center(currentLocation)
@@ -203,7 +201,7 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                 // Add Marker
                 mMap.addMarker(MarkerOptions().position(currentLocation).title(getAddressInfo()))
                 // Move camera to user's location
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, getZoomLevel(zoomLevel)), 1000, null)
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, getZoomLevel(userCircleRadius)), 1000, null)
 
 
 
@@ -231,13 +229,10 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                         if (etRadius.text.isNotEmpty()){
 
                             // Check if radius editText is greater then minimum radius 0.5
-                            if (etRadius.text.toString().toDouble() > 0.4){
-                                val radiusToDouble = etRadius.text.toString().trim().toDouble()
+                            if (correctInputRadius(etRadius, tvRadius)){
                                 // Round to 2 decimals
-                                val roundRadius = BigDecimal(radiusToDouble).setScale(2, RoundingMode.HALF_EVEN).toDouble()
+                                val roundRadius = BigDecimal(etRadius.text.toString().trim().toDouble()).setScale(2, RoundingMode.HALF_EVEN).toDouble()
                                 tvRadius.text = convertMetersKm(roundRadius.toString())
-
-                                var newZoom = 0f
 
 
                                 circleOptionsNew.center(currentLocation)
@@ -252,13 +247,14 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                             }
                         }
                         else{
-                            val radiusToDouble = userCircleRadius
                             // Round to 2 decimals
-                            val roundRadius = BigDecimal(radiusToDouble).setScale(2, RoundingMode.HALF_EVEN).toDouble()
+                            tvRadius.setTextColor(Color.parseColor("#353531"))
+                            val roundRadius = BigDecimal(userCircleRadius).setScale(2, RoundingMode.HALF_EVEN).toDouble()
                             tvRadius.text = convertMetersKm(roundRadius.toString())
                             mMap.clear()
                             mMap.addCircle(circleOptions)
                             mMap.addMarker(MarkerOptions().position(currentLocation).title(getAddressInfo()))
+                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, getZoomLevel(userCircleRadius)), 1000, null)
                         }
                     }
 

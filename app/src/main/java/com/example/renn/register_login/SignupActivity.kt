@@ -14,7 +14,7 @@ import com.example.renn.Categories
 import com.example.renn.MainActivity
 import com.example.renn.R
 import com.example.renn.User
-import com.example.renn.helpers.*
+import com.example.renn.utils.*
 import com.google.android.gms.common.SignInButton
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -40,7 +40,7 @@ class SignupActivity : AppCompatActivity() {
 
 
     // Email Pass Validators
-    private val validator = EmailPassValidatorRepository()
+    private val validator = EmailPassValidatorUtils()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

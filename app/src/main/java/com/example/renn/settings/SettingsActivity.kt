@@ -7,7 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import com.example.renn.R
-import com.example.renn.helpers.*
+import com.example.renn.utils.*
 import com.google.android.material.switchmaterial.SwitchMaterial
 
 class SettingsActivity : AppCompatActivity() {

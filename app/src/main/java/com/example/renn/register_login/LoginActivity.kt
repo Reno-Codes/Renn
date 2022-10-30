@@ -9,7 +9,9 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.renn.MainActivity
 import com.example.renn.R
-import com.example.renn.helpers.auth
+import com.example.renn.utils.auth
+import com.example.renn.utils.checkPermission
+import com.example.renn.utils.showDialogAndGetPermission
 
 class LoginActivity : AppCompatActivity() {
 
@@ -31,7 +33,12 @@ class LoginActivity : AppCompatActivity() {
 
 
         btnLogin.setOnClickListener {
-            login()
+            if (!checkPermission(this)) {
+                showDialogAndGetPermission(this, this@LoginActivity)
+            }
+            else{
+                login()
+            }
         }
 
         tvRedirectSignUp.setOnClickListener {

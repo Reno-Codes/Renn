@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import com.example.renn.categories.CategoryActivity
-import com.example.renn.helpers.*
+import com.example.renn.utils.*
 import com.example.renn.profile.ProfileActivity
 import com.example.renn.register_login.LoginActivity
 import com.example.renn.settings.SettingsActivity

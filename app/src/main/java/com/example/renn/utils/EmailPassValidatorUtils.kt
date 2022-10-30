@@ -1,10 +1,10 @@
-package com.example.renn.helpers
+package com.example.renn.utils
 
 import android.content.Context
 import androidx.appcompat.app.AlertDialog
 import java.util.regex.Pattern
 
-class EmailPassValidatorRepository {
+class EmailPassValidatorUtils {
     // Validate email
     fun isValidEmail(email: String): Boolean{
         @Suppress("RegExpRedundantEscape", "RegExpDuplicateCharacterInClass")

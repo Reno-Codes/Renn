@@ -1,4 +1,4 @@
-package com.example.renn.helpers
+package com.example.renn.utils
 
 import android.annotation.SuppressLint
 import com.google.firebase.auth.FirebaseAuth
@@ -21,7 +21,6 @@ fun isUserSignedIn(): Boolean{
     }
 }
 
-/* -- FIREBASE STUFF -- */
 // Database getReference()
 fun dbRef(path: String?) = FirebaseDatabase.getInstance().getReference(path!!)
 
