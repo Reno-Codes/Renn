@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
+import android.location.LocationManager
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -12,11 +13,11 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.example.renn.R
 import com.example.renn.utils.*
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.database.DatabaseReference
 import de.hdodenhof.circleimageview.CircleImageView
 import java.math.BigDecimal
 import java.math.RoundingMode
@@ -54,43 +55,29 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
         // FusedLocationProviderClient
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
+        // Check location settings
+        fun isLocationEnabled(): Boolean {
+            val locationManager: LocationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+
+            return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                    locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+        }
+
+
         // Back button
         backBtn.setOnClickListener {
             finish()
         }
 
 
-//        seek = findViewById(R.id.radiusSeekBar)
-//        seek.setOnSeekBarChangeListener(object :
-//            SeekBar.OnSeekBarChangeListener {
-//            @SuppressLint("SetTextI18n")
-//            override fun onProgressChanged(seek: SeekBar,
-//                                           progress: Int, fromUser: Boolean) {
-//                tvRadius.text = "${seek.progress} km"
-//            }
-//
-//            override fun onStartTrackingTouch(seek: SeekBar) {
-//                tvRadius.text = "${seek.progress} km"
-//            }
-//
-//            override fun onStopTrackingTouch(seek: SeekBar) {
-//                tvRadius.text = "${seek.progress} km"
-//            }
-//        })
-
-        /* XML */
-//        <SeekBar
-//        android:id="@+id/radiusSeekBar"
-//        android:layout_width="match_parent"
-//        android:layout_height="0dp"
-//        android:layout_weight="1"
-//        android:min="0"
-//        android:max="1000"/>
 
 
         updateLocationBtn.setOnClickListener {
             if (!checkPermission(this)) {
                 showDialogAndGetPermission(this, this@ProfileActivity)
+            }
+            else if (!isLocationEnabled()){
+                Toast.makeText(this,"Location is disabled. please enable!", Toast.LENGTH_SHORT).show()
             }
             else{
                 if (etRadius.text.isNotEmpty()){
@@ -99,11 +86,11 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                     }
                     else{
                         // Set Users Location to db and update map
-                        updateCurrentUserLocationAndUpdateMap(this, fusedLocationClient, mMap, tvAddress, tvRadius, etRadius)
+                        updateCurrentUserLocationAndUpdateMap(this, fusedLocationClient, mMap, tvAddress, tvRadius, etRadius, updateLocationBtn)
                     }
                 }
                 // Set Users Location to db and update map
-                updateCurrentUserLocationAndUpdateMap(this, fusedLocationClient, mMap, tvAddress, tvRadius, etRadius)
+                updateCurrentUserLocationAndUpdateMap(this, fusedLocationClient, mMap, tvAddress, tvRadius, etRadius, updateLocationBtn)
             }
         }
 
@@ -127,6 +114,13 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
             .child("Users")
             .child(auth.currentUser!!.uid).
             child("userCircleRadius")
+
+        // Current user location ref
+        val currentUserLocationRef = database
+            .child("Users")
+            .child(auth.currentUser!!.uid).
+            child("userLocation")
+
 
 
         tvAddress = findViewById(R.id.tvAddress)
@@ -171,35 +165,14 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                     .fillColor(Color.argb(50,4, 83, 194))
 
 
-                // Get details about coordinates
-                fun getAddressInfo(): String{
-                    val geocoder = Geocoder(this, Locale.getDefault())
-                    @Suppress("DEPRECATION") val addresses: List<Address> = geocoder
-                        .getFromLocation(currentLocation.latitude, currentLocation.longitude, 1)
-                            as List<Address>
 
-                    var address = "No address for this location"
-                    /*val city: String = addresses[0].locality
-                    val state: String = addresses[0].adminArea
-                    val country: String = addresses[0].countryName
-                    val postalCode: String = addresses[0].postalCode
-                    val knownName: String = addresses[0].featureName*/
+                tvAddress.text = getAddressInfo(this, currentLocation)
 
-                    if (addresses.isEmpty()){
-                        tvAddress.text = address
-                    }
-                    else{
-                        address = addresses[0].getAddressLine(0)
-                        tvAddress.text = address
-                    }
-
-                    return address
-                }
 
                 // Get back the mutable Circle
                 mMap.addCircle(circleOptions)
                 // Add Marker
-                mMap.addMarker(MarkerOptions().position(currentLocation).title(getAddressInfo()))
+                mMap.addMarker(MarkerOptions().position(currentLocation).title(getAddressInfo(this, currentLocation)))
                 // Move camera to user's location
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, getZoomLevel(userCircleRadius)), 1000, null)
 
@@ -225,37 +198,66 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                     // On radius text changed
                     override fun afterTextChanged(s: Editable) {
 
-                        // Check if radius editText is empty
-                        if (etRadius.text.isNotEmpty()){
+                        currentUserIdRef.get().addOnCompleteListener {
+                            val snapshotNew = it.result
+                            val userLatNew = snapshotNew.child("userLocation").child("latitude")
+                                .getValue(Double::class.java)
+                            val userLonNew = snapshotNew.child("userLocation").child("longitude")
+                                .getValue(Double::class.java)
 
-                            // Check if radius editText is greater then minimum radius 0.5
-                            if (correctInputRadius(etRadius, tvRadius, updateLocationBtn)){
+                            val userCircleRadiusNew = snapshotNew.child("userCircleRadius").getValue(Double::class.java)
+                            val newestLocation = LatLng(userLatNew!!, userLonNew!!)
+
+
+
+                            // Check if radius editText is empty
+                            if (etRadius.text.isNotEmpty()) {
+
+                                // Check if radius editText is greater then minimum radius 0.5
+                                if (correctInputRadius(etRadius, tvRadius, updateLocationBtn)) {
+                                    // Round to 2 decimals
+                                    val roundRadius = BigDecimal(etRadius.text.toString().trim().toDouble()).setScale(2, RoundingMode.HALF_EVEN).toDouble()
+                                    tvRadius.text = convertMetersKm(roundRadius.toString())
+
+
+                                    circleOptionsNew.center(newestLocation)
+                                        .radius(etRadius.text.toString().toDouble() * 1000)
+                                        .strokeWidth(10f)
+                                        .strokeColor(Color.argb(70, 4, 194, 83))
+                                        .fillColor(Color.argb(60, 4, 194, 83))
+                                    mMap.clear()
+                                    mMap.addCircle(circleOptionsNew)
+                                    mMap.addMarker(MarkerOptions().position(newestLocation).title(getAddressInfo(this@ProfileActivity, newestLocation)))
+                                    mMap.animateCamera(
+                                        CameraUpdateFactory.newLatLngZoom(
+                                            newestLocation,
+                                            getZoomLevel(etRadius.text.toString().toDouble())
+                                        ), 1000, null
+                                    )
+                                }
+                            } else {
+                                tvRadius.setTextColor(Color.parseColor("#353531"))
+                                updateLocationBtn.isEnabled = true
                                 // Round to 2 decimals
-                                val roundRadius = BigDecimal(etRadius.text.toString().trim().toDouble()).setScale(2, RoundingMode.HALF_EVEN).toDouble()
+                                val roundRadius =
+                                    BigDecimal(userCircleRadiusNew!!).setScale(2, RoundingMode.HALF_EVEN).toDouble()
                                 tvRadius.text = convertMetersKm(roundRadius.toString())
 
 
-                                circleOptionsNew.center(currentLocation)
-                                    .radius(etRadius.text.toString().toDouble() * 1000)
+                                circleOptionsNew.center(newestLocation)
+                                    .radius(userCircleRadiusNew * 1000)
                                     .strokeWidth(10f)
-                                    .strokeColor(Color.argb(70,4, 194, 83))
-                                    .fillColor(Color.argb(60,4, 194, 83))
+                                    .strokeColor(Color.argb(70, 4, 194, 83))
+                                    .fillColor(Color.argb(60, 4, 194, 83))
                                 mMap.clear()
                                 mMap.addCircle(circleOptionsNew)
-                                mMap.addMarker(MarkerOptions().position(currentLocation).title(getAddressInfo()))
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, getZoomLevel(etRadius.text.toString().toDouble())), 1000, null)
+                                mMap.addMarker(MarkerOptions().position(newestLocation)
+                                    .title(getAddressInfo(this@ProfileActivity, newestLocation)))
+                                mMap.animateCamera(
+                                    CameraUpdateFactory.newLatLngZoom(
+                                        newestLocation,
+                                        getZoomLevel(roundRadius)), 1000, null)
                             }
-                        }
-                        else{
-                            tvRadius.setTextColor(Color.parseColor("#353531"))
-                            updateLocationBtn.isEnabled = true
-                            // Round to 2 decimals
-                            val roundRadius = BigDecimal(userCircleRadius).setScale(2, RoundingMode.HALF_EVEN).toDouble()
-                            tvRadius.text = convertMetersKm(roundRadius.toString())
-                            mMap.clear()
-                            mMap.addCircle(circleOptions)
-                            mMap.addMarker(MarkerOptions().position(currentLocation).title(getAddressInfo()))
-                            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, getZoomLevel(userCircleRadius)), 1000, null)
                         }
                     }
 

@@ -33,4 +33,6 @@
     <string name="_1000">1000</string>
     <string name="circle_radius_meters">Circle radius (meters):</string>
     <string name="circle_radius_kilometers">Circle radius (kilometers)</string>
+    <string name="back_button">Back button</string>
+    <string name="search_icon">Search icon</string>
 </resources>

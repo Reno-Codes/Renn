@@ -8,14 +8,14 @@ import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
+import android.location.LocationManager
 import android.util.Log
-import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
-import androidx.core.text.set
+import androidx.core.content.ContextCompat.getSystemService
 import com.example.renn.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
@@ -121,7 +121,8 @@ fun updateCurrentUserLocationAndUpdateMap(
     googleMap: GoogleMap,
     tvAddress: TextView,
     tvRadius: TextView,
-    etRadius: EditText
+    etRadius: EditText,
+    updateLocationBtn: MaterialButton
 ){
     // Current user location table ref
     val currentUserLocationRef = database
@@ -134,6 +135,12 @@ fun updateCurrentUserLocationAndUpdateMap(
         .child("Users")
         .child(auth.currentUser!!.uid)
         .child("userCircleRadius")
+
+    updateLocationBtn.isEnabled = false
+    etRadius.isEnabled = false
+
+    tvAddress.text = "Please wait..."
+    tvRadius.text = ""
 
     @Suppress("DEPRECATION")
     fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, object : CancellationToken() {
@@ -241,12 +248,10 @@ fun updateCurrentUserLocationAndUpdateMap(
                             MarkerOptions().position(currentLocation).title(getAddressInfo())
                         )
                         // Move camera to user's location
-                        googleMap.moveCamera(
-                            CameraUpdateFactory.newLatLng(currentLocation)
-                        )
+                        googleMap.animateCamera(CameraUpdateFactory.newLatLng(currentLocation), 1000, null)
 
 
-                        Toast.makeText(context, "Location updated", Toast.LENGTH_SHORT).show()
+                        //Toast.makeText(context, "Location updated", Toast.LENGTH_SHORT).show()
 
                     } else {
                         Log.d(
@@ -263,6 +268,8 @@ fun updateCurrentUserLocationAndUpdateMap(
                 Log.d("SettingUserLocation", "SettingUserLocation: Location Latitude NOT SAVED!")
             }
         }
+        updateLocationBtn.isEnabled = true
+        etRadius.isEnabled = true
     }
 }
 
@@ -302,6 +309,26 @@ fun correctInputRadius(etRadius: EditText, tvRadius: TextView, updateLocationBtn
         updateLocationBtn.isEnabled = true
     }
     return isCorrectRadius
+}
+
+fun getAddressInfo(context: Context, location: LatLng): String{
+    val geocoder = Geocoder(context, Locale.getDefault())
+    @Suppress("DEPRECATION") val addresses: List<Address> = geocoder
+        .getFromLocation(location.latitude, location.longitude, 1)
+            as List<Address>
+
+    var address = "No address for this location"
+    /*val city: String = addresses[0].locality
+    val state: String = addresses[0].adminArea
+    val country: String = addresses[0].countryName
+    val postalCode: String = addresses[0].postalCode
+    val knownName: String = addresses[0].featureName*/
+
+    if (addresses.isNotEmpty()){
+        address = addresses[0].getAddressLine(0)
+    }
+
+    return address
 }
 
 

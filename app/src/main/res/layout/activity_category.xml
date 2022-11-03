@@ -25,7 +25,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:padding="15dp"
-                android:src="@drawable/ic_baseline_arrow_back_ios_24" />
+                android:src="@drawable/ic_baseline_arrow_back_ios_24"
+                android:contentDescription="@string/back_button" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -33,17 +34,18 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:padding="15dp"
-                android:src="@drawable/ic_white_search_24" />
+                android:src="@drawable/ic_white_search_24"
+                android:contentDescription="@string/search_icon" />
         </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:text="Which category?"
-            android:textSize="25sp"
+            android:text="Choose category"
+            android:textSize="20sp"
             android:textAllCaps="true"
-            android:padding="10dp"/>
+            android:padding="15dp"/>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
