@@ -35,4 +35,7 @@
     <string name="circle_radius_kilometers">Circle radius (kilometers)</string>
     <string name="back_button">Back button</string>
     <string name="search_icon">Search icon</string>
+    <string name="your_address">Your address</string>
+    <string name="current_address">current address</string>
+    <string name="add_address_details">Add address details</string>
 </resources>

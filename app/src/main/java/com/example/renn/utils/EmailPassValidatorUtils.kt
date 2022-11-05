@@ -1,7 +1,11 @@
 package com.example.renn.utils
 
 import android.content.Context
+import android.graphics.Color
 import androidx.appcompat.app.AlertDialog
+import androidx.core.text.buildSpannedString
+import androidx.core.text.color
+import com.google.android.material.textfield.TextInputLayout
 import java.util.regex.Pattern
 
 class EmailPassValidatorUtils {

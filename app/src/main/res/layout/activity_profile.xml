@@ -32,6 +32,7 @@
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:text="Profile"
+                android:textSize="17sp"
                 android:textAlignment="center"
                 android:textColor="@color/dark_grey" />
 
@@ -48,25 +49,37 @@
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/tvYourAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingTop="10dp"
-            android:text="@string/your_location"
-            android:textSize="20sp"
+            android:text="@string/your_address"
+            android:textAlignment="center"
             android:textColor="@color/dark_grey"
-            android:textStyle="bold"/>
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvCurrentAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/current_address"
+            android:textAlignment="center"
+            android:textColor="@color/dark_grey"
+            android:textSize="15sp" />
+
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
+
             android:layout_marginTop="30dp"
             map:strokeWidth="1dp"
             map:strokeColor="@color/maps_border_whiteish"
-            map:cardCornerRadius="15dp"
+
             android:layout_weight="1">
 
 
@@ -79,12 +92,61 @@
 
             </androidx.fragment.app.FragmentContainerView>
 
-            <ImageView
-                android:layout_width="70dp"
-                android:layout_height="90dp"
-                android:layout_gravity="center"
-                android:src="@drawable/geo_pin_delivery_centered"
-                android:contentDescription="geo pin" />
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
+
+                <RelativeLayout
+                    android:id="@+id/dialogAbovePin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_corners"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="75dp"
+                    android:elevation="3dp">
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Place the pin exactly on your door"
+                            android:textSize="15sp"
+                            android:gravity="center"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/tvUseThisPoint"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:text="Use this point >"
+                            android:textSize="14sp"
+                            android:textColor="@color/btn_color_orange" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+                <ImageView
+                    android:id="@+id/locationPin"
+                    android:elevation="4dp"
+                    android:layout_width="70dp"
+                    android:layout_height="90dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/my_pin"
+                    android:contentDescription="geo pin">
+                </ImageView>
+            </FrameLayout>
+
 
 
         </com.google.android.material.card.MaterialCardView>
