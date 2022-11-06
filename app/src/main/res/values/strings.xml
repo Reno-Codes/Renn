@@ -38,4 +38,11 @@
     <string name="your_address">Your address</string>
     <string name="current_address">current address</string>
     <string name="add_address_details">Add address details</string>
+    <string name="continue_">Continue</string>
+    <string name="street_name">Street name</string>
+    <string name="city">City</string>
+    <string name="house_number">House number</string>
+    <string name="country">Country</string>
+    <string name="postal_code">Postal Code</string>
+    <string name="specific_instructions">Specific instructions</string>
 </resources>

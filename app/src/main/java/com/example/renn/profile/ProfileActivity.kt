@@ -1,6 +1,7 @@
 package com.example.renn.profile
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Paint
@@ -11,6 +12,7 @@ import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.renn.AddressDetailsActivity
 import com.example.renn.R
@@ -44,10 +46,11 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var etRadius: EditText
     private lateinit var tvYourAddress: TextView
     private lateinit var tvCurrentAddress: TextView
-    private var currentRadius: Double = 0.0
     private lateinit var locationPin: ImageView
     private lateinit var dialogAbovePin: RelativeLayout
     private lateinit var tvUseThisPoint: TextView
+
+    private var currentRadius: Double = 0.0
 
 //    private lateinit var seek: SeekBar
 
@@ -67,6 +70,8 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
         ivProfileImage = findViewById(R.id.ivProfileImage)
         tvAddress = findViewById(R.id.tvAddress)
         updateLocationBtn = findViewById(R.id.updateLocationBtn)
+        updateLocationBtn.isEnabled = false
+
         tvRadius = findViewById(R.id.tvRadius)
         etRadius = findViewById(R.id.etRadius)
         tvYourAddress = findViewById(R.id.tvYourAddress)
@@ -101,7 +106,8 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
             bundle.putDouble("Latitude", cameraCurrentLocation.latitude)
             bundle.putDouble("Longitude", cameraCurrentLocation.longitude)
             intent.putExtras(bundle)
-            startActivity(intent)
+            intentLauncher.launch(Intent(intent))
+
         }
 
 
@@ -323,4 +329,32 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
+
+    private val intentLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+
+            if (result.resultCode == Activity.RESULT_OK) {
+                val streetNameResult = result.data?.getStringExtra("streetNameKey")
+                val houseNumberResult = result.data?.getStringExtra("houseNumberKey")
+                val postalCodeResult = result.data?.getStringExtra("postalCodeKey")
+                val cityResult = result.data?.getStringExtra("cityKey")
+                val countryResult = result.data?.getStringExtra("countryKey")
+                val fullAddressResult = result.data?.getStringExtra("fullAddressKey")
+
+                val latLngResult = result.data?.getBundleExtra("latLngKey")
+                val currentPinLocationLatLng = LatLng(latLngResult!!.getDouble("latitudeKey"), latLngResult.getDouble("longitudeKey"))
+
+                mMap.animateCamera(CameraUpdateFactory.newLatLng(currentPinLocationLatLng), 1000, null)
+
+                //updateLocationBtn.visibility = View.VISIBLE
+                updateLocationBtn.isEnabled = true
+
+                // TODO: updateLocationButton - Update location based on received information (result)
+                // TODO: Set Your Address textView based on fullAddressResult variable after updateLocationButton is clicked.
+                // TODO: Create 2 TextViews above UpdateLocationBtn that will show result details that will be updated to the user's database
+
+                // TODO: Signup should store all the info from the result (consider adding username field too)
+                // TODO:
+            }
+        }
 }

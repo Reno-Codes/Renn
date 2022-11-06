@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Address
 import android.location.Geocoder
+import android.location.Geocoder.GeocodeListener
 import android.location.Location
 import android.util.Log
 import android.widget.EditText
@@ -14,6 +15,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
+import androidx.core.text.buildSpannedString
+import androidx.core.text.color
 import com.example.renn.R
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
@@ -25,6 +28,7 @@ import com.google.android.gms.tasks.CancellationTokenSource
 import com.google.android.gms.tasks.OnTokenCanceledListener
 import com.google.android.libraries.places.api.model.RectangularBounds
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.ktx.getValue
 import com.google.maps.android.SphericalUtil
 import kotlinx.coroutines.delay
@@ -364,6 +368,7 @@ fun correctInputRadius(etRadius: EditText, tvRadius: TextView, updateLocationBtn
     return isCorrectRadius
 }
 
+// Get full address info
 fun getAddressInfo(context: Context, location: LatLng): String{
     val geocoder = Geocoder(context, Locale.getDefault())
     @Suppress("DEPRECATION") val addresses: List<Address> = geocoder
@@ -385,28 +390,28 @@ fun getAddressInfo(context: Context, location: LatLng): String{
 }
 
 
-fun getStreetNameAndHouseNumber(context: Context, location: LatLng): Pair<String, String>{
+// Get street name, city and house number
+fun getStreetNameCityAndHouseNumber(context: Context, location: LatLng): Triple<String, String, String>{
     val geocoder = Geocoder(context, Locale.getDefault())
     @Suppress("DEPRECATION") val addresses: List<Address> = geocoder
         .getFromLocation(location.latitude, location.longitude, 1)
             as List<Address>
 
-    var address = "No address detected"
+    var address = ""
+    var city = ""
     var houseNumber = ""
-    /*val city: String = addresses[0].locality
-    val state: String = addresses[0].adminArea
-    val country: String = addresses[0].countryName
-    val postalCode: String = addresses[0].postalCode
-    val knownName: String = addresses[0].featureName*/
+
 
     if (addresses.isNotEmpty()){
         address = addresses[0].thoroughfare ?: ""
+        city = addresses[0].locality ?: ""
         houseNumber = addresses[0].subThoroughfare ?: ""
     }
 
-    return Pair(address, houseNumber)
+    return Triple(address, city, houseNumber)
 }
 
+// Get Country and postal code
 fun getCountryAndPostalCode(context: Context, location: LatLng): Pair<String, String>{
     val geocoder = Geocoder(context, Locale.getDefault())
     @Suppress("DEPRECATION") val addresses: List<Address> = geocoder
@@ -415,11 +420,6 @@ fun getCountryAndPostalCode(context: Context, location: LatLng): Pair<String, St
 
     var country = ""
     var postalCode = ""
-    /*val city: String = addresses[0].locality
-    val state: String = addresses[0].adminArea
-    val country: String = addresses[0].countryName
-    val postalCode: String = addresses[0].postalCode
-    val knownName: String = addresses[0].featureName*/
 
     if (addresses.isNotEmpty()){
         country = addresses[0].countryName ?: ""
@@ -427,6 +427,36 @@ fun getCountryAndPostalCode(context: Context, location: LatLng): Pair<String, St
     }
 
     return Pair(country, postalCode)
+}
+
+
+// Get LatLng from given address
+@Suppress("DEPRECATION")
+fun getLatLngFromAddress(context: Context, address: String): Pair<Boolean, LatLng>{
+    val geocoder = Geocoder(context)
+    val addresses: List<Address> = geocoder
+        .getFromLocationName(address, 1)
+            as List<Address>
+
+    var latLng = LatLng(0.0, 0.0)
+    var validAddress = false
+
+
+    if (addresses.isNotEmpty()){
+        latLng = LatLng(addresses[0].latitude, addresses[0].longitude)
+        validAddress = true
+    }
+
+    Log.d("GET_LAT_LNG_FROM_ADDRESS", "getLatLngFromAddress: $latLng, $validAddress")
+    return Pair(validAddress, latLng)
+}
+
+// Add required asterisk
+fun TextInputLayout.markRequiredInRed() {
+    hint = buildSpannedString {
+        append(hint)
+        color(Color.RED) { append(" *") } // Mind the space prefix.
+    }
 }
 
 
