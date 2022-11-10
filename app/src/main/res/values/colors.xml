@@ -17,6 +17,8 @@
 
     <color name="dark_grey">#353531</color>
 
+    <color name="pink_red">#f95264</color>
+
     <!-- Maps -->
     <color name="maps_border_whiteish">#CCCCCC</color>
 </resources>
