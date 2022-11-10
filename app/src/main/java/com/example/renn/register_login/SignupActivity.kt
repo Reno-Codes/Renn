@@ -34,8 +34,6 @@ class SignupActivity : AppCompatActivity() {
     private lateinit var googleSignInBtn: SignInButton
 
 
-    private lateinit var userLoc: LatLng
-
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
 
@@ -48,10 +46,6 @@ class SignupActivity : AppCompatActivity() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
-
-
-        // Default location
-        userLoc = LatLng(0.0, 0.0)
 
         // View Bindings
         etEmail = findViewById(R.id.etSEmailAddress)
@@ -139,8 +133,7 @@ class SignupActivity : AppCompatActivity() {
                 val user = User(
                     email = email,
                     userid = userid,
-                    userLocation = LatLng(userLoc.latitude, userLoc.longitude),
-                    userCircleRadius = 1.3, // default kilometer
+                    userCircleRadius = 1.0, // default kilometer
                     workEnabled = false
                 )
                 // User default categories
@@ -151,8 +144,7 @@ class SignupActivity : AppCompatActivity() {
                 )
 
                 // Add to User to Realtime Database
-                val usersRef = database
-                    .child("Users")
+                val usersRef = database.child("Users")
 
                 usersRef.child(userid).setValue(user).addOnSuccessListener {
                     // Set Users Current Location to db

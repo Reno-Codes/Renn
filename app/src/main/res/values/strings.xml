@@ -45,4 +45,7 @@
     <string name="country">Country</string>
     <string name="postal_code">Postal Code</string>
     <string name="specific_instructions">Specific instructions</string>
+    <string name="radius_kilometers">Radius kilometers</string>
+    <string name="new_address">New address</string>
+    <string name="current_radius">current radius</string>
 </resources>

@@ -1,5 +1,6 @@
 package com.example.renn.utils
 
+import android.animation.Animator
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -10,14 +11,20 @@ import android.location.Geocoder
 import android.location.Geocoder.GeocodeListener
 import android.location.Location
 import android.util.Log
+import android.view.View
 import android.widget.EditText
+import android.widget.FrameLayout
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
+import com.airbnb.lottie.LottieAnimationView
 import com.example.renn.R
+import com.example.renn.User
+import com.example.renn.UserLocation
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -32,6 +39,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.ktx.getValue
 import com.google.maps.android.SphericalUtil
 import kotlinx.coroutines.delay
+import org.w3c.dom.Text
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.util.*
@@ -91,31 +99,58 @@ fun showDialogAndGetPermission(context: Context, activity: Activity) {
 
 
 fun updateLocationBasedOnPin(
-    location: LatLng,
     map: GoogleMap,
-    tvRadius: TextView,
+    tvCurrentRadius: TextView,
     etRadius: EditText,
-    updateLocationBtn: MaterialButton){
+    updateLocationBtn: MaterialButton,
+    tvRadius: TextView,
+    tvAddressPre: TextView,
+    tvAddress: TextView,
+    inputCircleRadius: LinearLayout,
 
-    val currentUserLocationRef = database
+    streetName: String,
+    houseNumber: String,
+    postalCode: String,
+    city: String,
+    country: String,
+    fullAddress: String,
+    coordinates: LatLng,
+    flAnimationView: FrameLayout,
+    animationView: LottieAnimationView
+){
+
+    val user = UserLocation(
+        userStreetName = streetName,
+        userHouseNumber = houseNumber,
+        userPostalCode = postalCode,
+        userCity = city,
+        userCountry = country,
+        userFullAddress = fullAddress
+    )
+
+    val currentUserLocationDetailsRef = database
         .child("Users")
         .child(auth.currentUser!!.uid)
-        .child("userLocation")
+        .child("Location_details")
 
     val currentUserCircleRadiusRef = database
         .child("Users")
         .child(auth.currentUser!!.uid)
         .child("userCircleRadius")
 
-    updateLocationBtn.isEnabled = false
-    etRadius.isEnabled = false
 
-    tvRadius.text = ""
+    // Update Location details
+    currentUserLocationDetailsRef.setValue(user).addOnSuccessListener {
 
-    // Update Location
-    currentUserLocationRef.setValue(location).addOnSuccessListener {
+        playSuccessAnimation(flAnimationView, animationView)
 
-        // Update Radius?
+        updateLocationBtn.isEnabled = false
+        tvRadius.visibility = View.GONE
+        tvAddressPre.visibility = View.GONE
+        tvAddress.visibility = View.GONE
+        inputCircleRadius.visibility = View.GONE
+
+        // Update Radius
         if (etRadius.text.isNotEmpty()) {
             val radiusToDouble = etRadius.text.toString().trim().toDouble()
             // Round to 2 decimals
@@ -125,19 +160,43 @@ fun updateLocationBasedOnPin(
             currentUserCircleRadiusRef.setValue(roundRadius)
         }
 
-        // set buttons and views back
-        updateLocationBtn.isEnabled = true
-        etRadius.isEnabled = true
+        // Update coordinates
+        currentUserLocationDetailsRef.child("userLocation").setValue(coordinates)
 
         currentUserCircleRadiusRef.get().addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val snapshot = task.result
                 val radius = snapshot.getValue(Double::class.java)
-                tvRadius.text = tvRadiusConverter(radius.toString())
+                tvCurrentRadius.text = tvRadiusConverter(radius.toString())
 
-                map.animateCamera(CameraUpdateFactory.newLatLngZoom(location, getZoomLevel(radius!!)), 1000, null)
+                animationView.addAnimatorListener(object : Animator.AnimatorListener {
+                    override fun onAnimationStart(animation: Animator) {
+                        Log.e("Animation:", "start")
+                    }
+                    override fun onAnimationEnd(animation: Animator) {
+                        Log.e("Animation:", "end")
+                        //Ex: here the layout is removed!
+
+                        if (!animation.isRunning){
+                            flAnimationView.visibility= View.GONE
+                            map.animateCamera(CameraUpdateFactory.newLatLngZoom(coordinates, getZoomLevel(radius!!)), 1000, null)
+                        }
+                    }
+
+                    override fun onAnimationCancel(animation: Animator) {
+                        Log.e("Animation:", "cancel")
+                    }
+
+                    override fun onAnimationRepeat(animation: Animator) {
+                        Log.e("Animation:", "repeat")
+                    }
+
+                })
             }
         }
+    }.addOnFailureListener {
+
+        playFailedAnimation(flAnimationView, animationView)
     }
 }
 
@@ -145,11 +204,21 @@ fun updateLocationBasedOnPin(
 // Get user location and save it to User's table in db
 @SuppressLint("MissingPermission")
 fun updateCurrentUserLocation(context: Context, fusedLocationClient: FusedLocationProviderClient){
+
+    var streetName = "No street name detected"
+    var houseNumber = "No house number detected"
+    var postalCode = "No house number detected"
+    var city = "No city detected"
+    var country = "No country detected"
+    var fullAddress: String
+    var coordinates: LatLng
+
+
     // Current user location table
     val currentUserLocationRef = database
         .child("Users")
         .child(auth.currentUser!!.uid)
-        .child("userLocation")
+        .child("Location_details")
 
     @Suppress("DEPRECATION")
     fusedLocationClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, object : CancellationToken() {
@@ -158,12 +227,36 @@ fun updateCurrentUserLocation(context: Context, fusedLocationClient: FusedLocati
         if (location == null)
             Toast.makeText(context, "Cannot get location.", Toast.LENGTH_SHORT).show()
         else {
-            val userLoc = LatLng(location.latitude, location.longitude)
 
-            currentUserLocationRef.setValue(userLoc).addOnSuccessListener {
-                Log.d("SettingUserLocation", "SettingUserLocation: Location Latitude saved to database!")
-            }.addOnFailureListener {
-                Log.d("SettingUserLocation", "SettingUserLocation: Location Latitude NOT SAVED!")
+            val geocoder = Geocoder(context, Locale.getDefault())
+            @Suppress("DEPRECATION") val addresses: List<Address> = geocoder
+                .getFromLocation(location.latitude, location.longitude, 1)
+                    as List<Address>
+
+            if (addresses.isNotEmpty()){
+                streetName = addresses[0].thoroughfare ?: streetName
+                houseNumber = addresses[0].subThoroughfare ?: houseNumber
+                postalCode = addresses[0].postalCode ?: postalCode
+                city = addresses[0].locality ?: city
+                country = addresses[0].countryName ?: country
+                fullAddress = addresses[0].getAddressLine(0)
+                coordinates = LatLng(location.latitude, location.longitude)
+
+                val user = UserLocation(
+                    userStreetName = streetName,
+                    userHouseNumber = houseNumber,
+                    userPostalCode = postalCode,
+                    userCity = city,
+                    userCountry = country,
+                    userFullAddress = fullAddress,
+                    userLocation = coordinates
+                )
+
+                currentUserLocationRef.setValue(user).addOnSuccessListener {
+                    Log.d("SignupUserLocation", "SettingUserLocation: Location saved to database!")
+                }.addOnFailureListener {
+                    Log.d("SignupUserLocation", "SettingUserLocation: Location NOT SAVED!")
+                }
             }
         }
     }
@@ -344,25 +437,26 @@ fun getZoomLevel(radius: Double): Float {
 
 // Check is input radius correct (min 0.5 km - max 1000 km)
 @SuppressLint("SetTextI18n")
-fun correctInputRadius(etRadius: EditText, tvRadius: TextView, updateLocationBtn: MaterialButton): Boolean{
+fun correctInputRadius(etRadius: EditText, tvRadius: TextView, updateLocationBtn: MaterialButton, etRadiusInputLayout: TextInputLayout): Boolean{
     var isCorrectRadius = true
     if (etRadius.text.toString().toDouble() < 0.5){
         etRadius.setTextColor(Color.RED)
         tvRadius.setTextColor(Color.RED)
-        tvRadius.text = "Minimum radius is 0.5 km"
+        etRadiusInputLayout.hint = "Circle radius (kilometers) - Minimum 0.5 km"
         updateLocationBtn.isEnabled = false
         isCorrectRadius = false
     }
     else if (etRadius.text.toString().toDouble() > 1000){
         etRadius.setTextColor(Color.RED)
         tvRadius.setTextColor(Color.RED)
-        tvRadius.text = "Maximum radius is 1000 km"
+        etRadiusInputLayout.hint = "Circle radius (kilometers) - Maximum 1000 km"
         updateLocationBtn.isEnabled = false
         isCorrectRadius = false
     }
     else{
         etRadius.setTextColor(Color.parseColor("#353531"))
         tvRadius.setTextColor(Color.parseColor("#353531"))
+        etRadiusInputLayout.hint = "Circle radius (kilometers)"
         updateLocationBtn.isEnabled = true
     }
     return isCorrectRadius

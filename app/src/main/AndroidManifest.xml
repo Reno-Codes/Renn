@@ -19,16 +19,31 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".splashes.SplashPostJobActivity"
+            android:exported="false"
+
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".AddressDetailsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"
-            android:exported="false">
+            tools:ignore="LockedOrientationActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
             android:name=".categories.CategoryActivity"
-            android:exported="false">
+            android:exported="false"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -40,12 +55,19 @@
 
         <activity
             android:name=".profile.ProfileActivity"
-            android:windowSoftInputMode="adjustResize"
             android:exported="false"
-            android:label="@string/title_activity_profile" />
+            android:label="@string/title_activity_profile"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" >
+
+        </activity>
+
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -56,25 +78,34 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <activity
             android:name=".register_login.LoginActivity"
             android:exported="false"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <activity
             android:name=".register_login.SignupActivity"
             android:exported="false"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <activity
             android:name=".settings.SettingsActivity"
-            android:exported="false">
+            android:exported="false"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
