@@ -19,12 +19,24 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".MainActivityFragment"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".splashes.SplashPostJobActivity"
             android:exported="false"
-
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
-
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -58,9 +70,7 @@
             android:exported="false"
             android:label="@string/title_activity_profile"
             android:screenOrientation="portrait"
-            tools:ignore="LockedOrientationActivity" >
-
-        </activity>
+            tools:ignore="LockedOrientationActivity" />
 
         <activity
             android:name=".MainActivity"
@@ -68,17 +78,11 @@
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".register_login.LoginActivity"
             android:exported="false"
@@ -89,7 +93,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".register_login.SignupActivity"
             android:exported="false"
@@ -100,7 +103,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".settings.SettingsActivity"
             android:exported="false"

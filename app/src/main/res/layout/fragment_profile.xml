@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    tools:context=".fragments.ProfileFragment">
+
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/pink_red">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="Profile"
+            android:fontFamily="@font/instagram_sans"
+            android:textSize="17sp"
+            android:textAlignment="center"
+            android:textColor="@color/white" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civProfileSettings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:padding="15dp"
+            android:src="@drawable/cog_outline"/>
+    </RelativeLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mainCardView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/topBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:backgroundTint="@color/pink_red"
+        style="@style/CustomCardViewStyle">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="35dp">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civProfileImage"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+
+                android:src="@drawable/ja"
+                android:layout_gravity="center"
+                android:elevation="5dp">
+
+            </de.hdodenhof.circleimageview.CircleImageView>
+
+            <TextView
+                android:id="@+id/tvUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@+id/civProfileImage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+
+                android:text="username"
+                android:textColor="@color/white"
+                android:fontFamily="@font/instagram_sans"
+                android:textSize="15sp">
+
+            </TextView>
+
+            <TextView
+                android:id="@+id/tvBio"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                app:layout_constraintTop_toBottomOf="@+id/tvUsername"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:gravity="center"
+                android:layout_marginTop="0dp"
+
+                android:text="Construction works, plumbing | Osijek"
+                android:textColor="@color/description_color_white"
+                android:fontFamily="@font/instagram_sans"
+                android:textSize="12sp">
+
+            </TextView>
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="20dp"
+                app:layout_constraintTop_toBottomOf="@+id/tvUsername"
+                app:layout_constraintStart_toEndOf="@id/tvBio"
+                android:layout_marginStart="4dp"
+                android:src="@drawable/flag_hr">
+
+            </ImageView>
+
+            <!-- White block counters -->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="220dp"
+                android:layout_height="58dp"
+                android:background="@drawable/white_block_rounded_corners"
+                android:layout_marginTop="30dp"
+                app:layout_constraintTop_toBottomOf="@+id/tvBio"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:id="@+id/jobs"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/rating"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvJobsCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_gravity="center"
+                        android:text="2"
+                        android:textColor="@color/pink_red"
+                        android:fontFamily="@font/instagram_sans"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvJobsCount"
+                        android:layout_gravity="center"
+                        android:text="jobs"
+                        android:textColor="@color/dark_grey"
+                        android:fontFamily="@font/instagram_sans"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/rating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvRatingCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_gravity="center"
+                        android:text="4.7 / 5"
+                        android:textColor="@color/pink_red"
+                        android:fontFamily="@font/instagram_sans"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvRatingCount"
+                        android:layout_gravity="center"
+                        android:text="rating"
+                        android:textColor="@color/dark_grey"
+                        android:fontFamily="@font/instagram_sans"/>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toEndOf="@+id/rating"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvTimeCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_gravity="center"
+                    android:text="2 days"
+                    android:textColor="@color/pink_red"
+                    android:fontFamily="@font/instagram_sans"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvTimeCount"
+                    android:layout_gravity="center"
+                    android:text="working"
+                    android:textColor="@color/dark_grey"
+                    android:fontFamily="@font/instagram_sans"/>
+                </LinearLayout>
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+    <Button
+        android:id="@+id/setLocationButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/mainCardView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="15dp"
+
+        android:text="Set location"
+        android:fontFamily="@font/instagram_sans"
+        android:textAllCaps="false">
+    </Button>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

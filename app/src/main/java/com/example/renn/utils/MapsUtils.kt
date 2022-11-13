@@ -604,6 +604,7 @@ fun getBounds(map: GoogleMap): List<Double> {
 }
 
 
+
 fun circleBounds(radius: Double, location: LatLng): RectangularBounds{
 // optional: to get distance to circle radius, not the edge
     val distance = radius * sqrt(2.0)

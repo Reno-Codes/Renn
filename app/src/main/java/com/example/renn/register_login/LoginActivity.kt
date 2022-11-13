@@ -12,12 +12,13 @@ import com.example.renn.R
 import com.example.renn.utils.auth
 import com.example.renn.utils.checkPermission
 import com.example.renn.utils.showDialogAndGetPermission
+import com.google.android.material.textfield.TextInputEditText
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var tvRedirectSignUp: TextView
-    private lateinit var etEmail: EditText
-    private lateinit var etPass: EditText
+    private lateinit var etEmail: TextInputEditText
+    private lateinit var etPass: TextInputEditText
     private lateinit var btnLogin: Button
 
 

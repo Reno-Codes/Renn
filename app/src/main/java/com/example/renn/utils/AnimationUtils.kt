@@ -10,7 +10,7 @@ import com.example.renn.R
 fun playLoadingAnimation(layout: FrameLayout, animationView: LottieAnimationView){
     // Loading animation
     layout.visibility = View.VISIBLE
-    animationView.setAnimation(R.raw.loading_three_dots_orange_white)
+    animationView.setAnimation(R.raw.loading_three_dots_red_white)
     animationView.playAnimation()
 
 

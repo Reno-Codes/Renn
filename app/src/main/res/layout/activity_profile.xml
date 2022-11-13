@@ -50,6 +50,7 @@
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:text="Profile"
+                android:fontFamily="@font/instagram_sans"
                 android:textSize="17sp"
                 android:textAlignment="center"
                 android:textColor="@color/dark_grey" />
@@ -73,6 +74,7 @@
             android:gravity="center"
             android:paddingTop="10dp"
             android:text="@string/your_address"
+            android:fontFamily="@font/instagram_sans"
             android:textAlignment="center"
             android:textColor="@color/dark_grey"
             android:textSize="20sp"
@@ -84,6 +86,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/current_address"
+            android:fontFamily="@font/instagram_sans"
             android:textAlignment="center"
             android:textColor="@color/dark_grey"
             android:textSize="15sp" />
@@ -94,6 +97,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/current_radius"
+            android:fontFamily="@font/instagram_sans"
             android:textAlignment="center"
             android:textColor="@color/dark_grey"
             android:textSize="15sp" />
@@ -103,7 +107,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal|center_vertical"
-
             android:layout_marginTop="15dp"
             map:strokeWidth="1dp"
             map:strokeColor="@color/maps_border_whiteish"
@@ -170,10 +173,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Place the pin exactly on your door"
+                            android:fontFamily="@font/instagram_sans"
                             android:textSize="16sp"
-                            android:fontFamily="sans-serif-light"
                             android:gravity="center"
-                            android:textColor="@color/black" />
+                            android:textColor="@color/dark_grey" />
 
                         <TextView
                             android:id="@+id/tvUseThisPoint"
@@ -181,6 +184,7 @@
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
                             android:text="Use this point >"
+                            android:fontFamily="@font/instagram_sans"
                             android:textStyle="bold"
                             android:textSize="15sp"
 
@@ -219,6 +223,7 @@
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:text="This is your new address"
+                android:fontFamily="@font/instagram_sans"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 android:textColor="@color/dark_grey"
@@ -231,6 +236,7 @@
                     android:gravity="center"
                     android:layout_gravity="center"
                     android:text="@string/new_address"
+                    android:fontFamily="@font/instagram_sans"
                     android:textSize="15sp"
                     android:textColor="@color/dark_grey"
                     android:background="@color/quantum_googgreen100"
@@ -242,6 +248,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text=""
+                android:fontFamily="@font/instagram_sans"
                 android:layout_gravity="center"
                 android:paddingBottom="15dp"
                 android:textSize="15sp"
@@ -281,6 +288,7 @@
                         android:layout_weight="1"
                         android:backgroundTint="@color/white"
                         android:singleLine="true"
+                        android:fontFamily="@font/instagram_sans"
                         android:inputType="numberDecimal"
                         android:textColor="@color/dark_grey"
                         android:textColorHint="#757575"
@@ -296,10 +304,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:textColor="@color/white"
-                android:backgroundTint="@color/pink_red"
                 map:cornerRadius="15dp"
-
-                android:text="@string/update_location">
+                android:enabled="false"
+                android:text="@string/update_location"
+                android:fontFamily="@font/instagram_sans">
             </com.google.android.material.button.MaterialButton>
 
 

@@ -31,6 +31,7 @@ class SettingsActivity : AppCompatActivity() {
         taxiSwitch = findViewById(R.id.switchTaxi)
         workSwitch = findViewById(R.id.switchWork)
 
+
         // Back button
         backBtn = findViewById(R.id.backBtn)
         backBtn.setOnClickListener {
