@@ -8,6 +8,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.example.renn.MainActivity
+import com.example.renn.MainActivityFragment
 import com.example.renn.R
 import com.example.renn.utils.auth
 import com.example.renn.utils.checkPermission
@@ -62,7 +63,7 @@ class LoginActivity : AppCompatActivity() {
         auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(this) {
             if (it.isSuccessful) {
                 Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, MainActivity::class.java)
+                val intent = Intent(this, MainActivityFragment::class.java)
                 startActivity(intent)
                 finish()
             } else

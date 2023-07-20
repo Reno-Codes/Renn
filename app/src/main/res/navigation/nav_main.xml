@@ -9,12 +9,30 @@
         android:id="@+id/homeFragment"
         android:name="com.example.renn.fragments.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+    </fragment>
 
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.renn.fragments.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_enableWorkFragment"
+            app:destination="@id/enableWorkFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/enableWorkFragment"
+        android:name="com.example.renn.fragments.EnableWorkFragment"
+        android:label="EnableWorkFragment"
+        tools:layout="@layout/fragment_enable_work" />
+
+    <fragment
+        android:id="@+id/routesFragment"
+        android:name="com.example.renn.fragments.RoutesFragment"
+        android:label="fragment_routes"
+        tools:layout="@layout/fragment_routes" />
+
 
 </navigation>

@@ -19,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.airbnb.lottie.LottieAnimationView
 import com.example.renn.AddressDetailsActivity
+import com.example.renn.MainActivityFragment
 import com.example.renn.R
 import com.example.renn.utils.*
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -133,7 +134,6 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
             return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
                     locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
         }
-
 
         // Back button
         backBtn.setOnClickListener {
@@ -310,6 +310,10 @@ class ProfileActivity : AppCompatActivity(), OnMapReadyCallback {
                 //mMap.addMarker(MarkerOptions().position(currentLocation).title(getAddressInfo(this, currentLocation)))
                 // Move camera to user's location
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, getZoomLevel(userCircleRadius)), 1000, null)
+
+                // Stop animation
+                flLottieAnimation.visibility = View.GONE
+                animationView.cancelAnimation()
 
 
                 // On Camera Move

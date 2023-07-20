@@ -18,7 +18,7 @@
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:navGraph="@navigation/nav_main">
     </fragment>
-    
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:background="@color/dark_grey"
         android:id="@+id/bottomNavigationView"

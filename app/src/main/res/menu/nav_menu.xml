@@ -11,4 +11,9 @@
         android:icon="@drawable/ic_menu_person_white"
         android:title="Profile"/>
 
+    <item
+        android:id="@+id/routesFragment"
+        android:icon="@drawable/ic_outline_map_24"
+        android:title="Routes"/>
+
 </menu>

@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import com.example.renn.R
 import com.example.renn.utils.*
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -51,6 +53,8 @@ class SettingsActivity : AppCompatActivity() {
                 }.addOnFailureListener {
                     Log.d("workEnabled", "workEnabled: Can't enable work")
                 }
+
+                //findNavController(R.id.activity_main_fragment_nav_host_fragment).navigate(R.id.profileFragment)
 
                 workSwitch.text = getString(R.string.disable_work)
                 //workSwitch.setTextColor(Color.parseColor("#0aad3f"))

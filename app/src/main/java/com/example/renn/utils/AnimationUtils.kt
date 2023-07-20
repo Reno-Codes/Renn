@@ -7,10 +7,18 @@ import android.widget.FrameLayout
 import com.airbnb.lottie.LottieAnimationView
 import com.example.renn.R
 
+class Animation{
+    lateinit var layout: FrameLayout
+    lateinit var animationView: LottieAnimationView
+
+
+}
+
 fun playLoadingAnimation(layout: FrameLayout, animationView: LottieAnimationView){
     // Loading animation
     layout.visibility = View.VISIBLE
     animationView.setAnimation(R.raw.loading_three_dots_red_white)
+    animationView.repeatCount = 999
     animationView.playAnimation()
 
 
@@ -29,6 +37,9 @@ fun playLoadingAnimation(layout: FrameLayout, animationView: LottieAnimationView
 
         override fun onAnimationCancel(animation: Animator) {
             Log.e("Animation:", "cancel")
+            if (!animation.isRunning){
+                layout.visibility= View.GONE
+            }
         }
 
         override fun onAnimationRepeat(animation: Animator) {
@@ -43,6 +54,7 @@ fun playSuccessAnimation(layout: FrameLayout, animationView: LottieAnimationView
     // Loading animation
     layout.visibility = View.VISIBLE
     animationView.setAnimation(R.raw.success_checked_green)
+    animationView.repeatCount = 0
     animationView.playAnimation()
 
 
@@ -76,6 +88,7 @@ fun playFailedAnimation(layout: FrameLayout, animationView: LottieAnimationView)
     // Loading animation
     layout.visibility = View.VISIBLE
     animationView.setAnimation(R.raw.error_animation)
+    animationView.repeatCount = 0
     animationView.playAnimation()
 
 
