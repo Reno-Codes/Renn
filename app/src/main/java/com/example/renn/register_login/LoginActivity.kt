@@ -9,17 +9,18 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.renn.MainActivity
 import com.example.renn.R
-import com.google.firebase.auth.FirebaseAuth
+import com.example.renn.utils.auth
+import com.example.renn.utils.checkPermission
+import com.example.renn.utils.showDialogAndGetPermission
+import com.google.android.material.textfield.TextInputEditText
 
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var tvRedirectSignUp: TextView
-    private lateinit var etEmail: EditText
-    private lateinit var etPass: EditText
+    private lateinit var etEmail: TextInputEditText
+    private lateinit var etPass: TextInputEditText
     private lateinit var btnLogin: Button
 
-    // Creating firebaseAuth object
-    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,18 +32,19 @@ class LoginActivity : AppCompatActivity() {
         btnLogin = findViewById(R.id.btnLogin)
         tvRedirectSignUp = findViewById(R.id.tvRedirectSignUp)
 
-        // initialising Firebase auth object
-        auth = FirebaseAuth.getInstance()
 
         btnLogin.setOnClickListener {
-            login()
+            if (!checkPermission(this)) {
+                showDialogAndGetPermission(this, this@LoginActivity)
+            }
+            else{
+                login()
+            }
         }
 
         tvRedirectSignUp.setOnClickListener {
             val intent = Intent(this, SignupActivity::class.java)
             startActivity(intent)
-            overridePendingTransition(R.anim.slide_up, R.anim.slide_down)
-            // using finish() to end the activity
             finish()
         }
     }
@@ -54,7 +56,7 @@ class LoginActivity : AppCompatActivity() {
         // function using Firebase auth object
         // On successful response Display a Toast
         if (email.isBlank() || pass.isBlank()) {
-            Toast.makeText(this, "Email and Password can't be blank", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Email / password can't be blank", Toast.LENGTH_SHORT).show()
             return
         }
         auth.signInWithEmailAndPassword(email, pass).addOnCompleteListener(this) {
@@ -62,8 +64,6 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this, "Login successful", Toast.LENGTH_SHORT).show()
                 val intent = Intent(this, MainActivity::class.java)
                 startActivity(intent)
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left)
-                // using finish() to end the current activity (activity_login)
                 finish()
             } else
                 Toast.makeText(this, "Login failed. Try again.", Toast.LENGTH_SHORT).show()

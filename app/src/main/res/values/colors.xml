@@ -13,10 +13,13 @@
 
     <!-- Text colors -->
     <color name="white">#FFFFFFFF</color>
-    <color name="description_color_white">#85FFFFFF</color>
+    <color name="description_color_white">#A6FFFFFF</color>
 
     <color name="dark_grey">#353531</color>
 
+    <color name="pink_red">#F95255</color>
+
     <!-- Maps -->
     <color name="maps_border_whiteish">#CCCCCC</color>
+
 </resources>

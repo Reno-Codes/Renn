@@ -44,6 +44,7 @@
                     android:layout_centerInParent="true"
                     android:gravity="center"
                     android:text="@string/email"
+                    android:fontFamily="@font/instagram_sans"
                     android:textAlignment="center"
                     android:textColor="@color/white" />
 
@@ -77,6 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/what_do_you_need"
+                android:fontFamily="@font/instagram_sans"
                 android:textColorHint="@color/description_color_white"
                 android:textColor="@color/white"
                 android:inputType="text"
@@ -94,7 +96,8 @@
                 android:layout_gravity="center"
                 android:text="@string/post"
                 android:textAllCaps="true"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:backgroundTint="@color/pink_red"/>
 
             <Button
                 android:id="@+id/categoriesBtn"
@@ -104,7 +107,8 @@
                 android:layout_gravity="center"
                 android:text="Categories"
                 android:textAllCaps="false"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:backgroundTint="@color/pink_red"/>
 
             <Button
                 android:id="@+id/profileBtn"
@@ -113,7 +117,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Profile"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:backgroundTint="@color/pink_red"/>
 
             <Space
                 android:layout_width="match_parent"
@@ -126,7 +131,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/sign_out"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:backgroundTint="@color/pink_red"/>
 
         </LinearLayout>
     </LinearLayout>

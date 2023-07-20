@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.*
 import com.example.renn.categories.CategoryActivity
-import com.example.renn.helpers.FirebaseRepository
+import com.example.renn.utils.*
 import com.example.renn.profile.ProfileActivity
 import com.example.renn.register_login.LoginActivity
 import com.example.renn.settings.SettingsActivity
@@ -16,14 +16,6 @@ import com.google.android.gms.location.LocationServices
 
 
 class MainActivity : AppCompatActivity() {
-    // Auth and Database
-
-    private val firebase = FirebaseRepository()
-    private val auth = firebase.getInstance()
-    private val usersRef = firebase.dbRef("Users")
-    private val currentUserId = firebase.currentUserUid()
-    private val currentUserEmail = firebase.currentUserEmail()
-
 
     // TextViews and EditTexts
     private lateinit var tvEmail: TextView
@@ -41,10 +33,12 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
 
+    /* onCreate */
     @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         // Bind TextViews and EditTexts
         tvEmail = findViewById(R.id.tvEmail)
@@ -59,8 +53,22 @@ class MainActivity : AppCompatActivity() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
+
         // Check if user is signed in
-        checkLoggedIn()
+        if(isUserSignedIn()){
+            val currentUserEmail = auth.currentUser?.email
+            tvEmail.text = "$currentUserEmail"
+        }
+        else{
+            Log.d("checkLoggedInTAG", "checkLoggedIn: User not logged in")
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            Toast.makeText(this,"Please sign in..", Toast.LENGTH_SHORT).show()
+            finish()
+        }
+
+        val currentUserId = auth.currentUser?.uid
+        val usersRef = database.child("Users")
 
 
         // Category button
@@ -121,20 +129,5 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-    }
-
-    // Check if user is signed in
-    @SuppressLint("SetTextI18n")
-    private fun checkLoggedIn(){
-        if(firebase.currentUser() == null){
-            Log.d("checkLoggedInTAG", "checkLoggedIn: User not logged in")
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            Toast.makeText(this,"Please sign in..", Toast.LENGTH_SHORT).show()
-            finish()
-        }
-        else{
-            tvEmail.text = "$currentUserEmail"
-        }
     }
 }

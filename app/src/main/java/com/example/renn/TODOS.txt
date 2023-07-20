@@ -4,8 +4,11 @@ Layouts and Styles
 2. DONE - (Correct all color in all activities and layouts to use defined colors)
 
 Activities
-3. TODO (Make functions reusable (Folder Utils, inside make Firebase utils, Maps utils etc and their functions))
--- Stao na MapsRepository
-3.1 TODO( Add checkLoggedIn from MainActivity.kt to FirebaseRepository and make it return Boolean )
 
 4. TODO (Correct all activities to use reusable functions)
+
+
+5. TODO( Use this for CategoryActivity displaying etc. and try to implement it for user sign up as well )
+        //for (category in CategoryNameAndDescription){
+        //    println("Category: ${category.key}\nValue: ${category.value}")
+        //}

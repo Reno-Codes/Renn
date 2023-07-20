@@ -7,11 +7,28 @@
     android:layout_width="match_parent"
     tools:context=".profile.ProfileActivity">
 
+    <FrameLayout
+        android:id="@+id/flLottieAnimation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#A6000000"
+        android:elevation="10dp"
+        android:visibility="gone">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/animationView"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center"/>
+
+    </FrameLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -24,7 +41,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:padding="15dp"
-                android:src="@drawable/ic_baseline_arrow_mygrey_back_ios_24" />
+                android:src="@drawable/ic_baseline_arrow_mygrey_back_ios_24"
+                android:contentDescription="@string/back_button" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -32,6 +50,8 @@
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:text="Profile"
+                android:fontFamily="@font/instagram_sans"
+                android:textSize="17sp"
                 android:textAlignment="center"
                 android:textColor="@color/dark_grey" />
 
@@ -48,26 +68,51 @@
         </RelativeLayout>
 
         <TextView
+            android:id="@+id/tvYourAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:paddingTop="10dp"
-            android:text="@string/your_location"
-            android:textSize="20sp"
+            android:text="@string/your_address"
+            android:fontFamily="@font/instagram_sans"
+            android:textAlignment="center"
             android:textColor="@color/dark_grey"
-            android:textStyle="bold"/>
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvCurrentAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/current_address"
+            android:fontFamily="@font/instagram_sans"
+            android:textAlignment="center"
+            android:textColor="@color/dark_grey"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tvCurrentRadius"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/current_radius"
+            android:fontFamily="@font/instagram_sans"
+            android:textAlignment="center"
+            android:textColor="@color/dark_grey"
+            android:textSize="15sp" />
+
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="15dp"
             map:strokeWidth="1dp"
             map:strokeColor="@color/maps_border_whiteish"
-            map:cardCornerRadius="15dp"
+
             android:layout_weight="1">
+
 
             <androidx.fragment.app.FragmentContainerView
                 android:layout_width="match_parent"
@@ -77,6 +122,89 @@
                 android:name="com.google.android.gms.maps.SupportMapFragment">
 
             </androidx.fragment.app.FragmentContainerView>
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/switchMapBtn"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="top|end"
+                    android:layout_margin="15dp"
+                    android:elevation="4dp"
+                    android:src="@drawable/ic_eye_circle">
+
+                </de.hdodenhof.circleimageview.CircleImageView>
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/customMyLocationButton"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="bottom|end"
+                    android:layout_margin="15dp"
+                    android:elevation="4dp"
+                    android:src="@drawable/location_icon_white">
+
+                </de.hdodenhof.circleimageview.CircleImageView>
+
+                <RelativeLayout
+                    android:id="@+id/dialogAbovePin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rounded_corners"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="75dp"
+                    android:elevation="3dp">
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Place the pin exactly on your door"
+                            android:fontFamily="@font/instagram_sans"
+                            android:textSize="16sp"
+                            android:gravity="center"
+                            android:textColor="@color/dark_grey" />
+
+                        <TextView
+                            android:id="@+id/tvUseThisPoint"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:text="Use this point >"
+                            android:fontFamily="@font/instagram_sans"
+                            android:textStyle="bold"
+                            android:textSize="15sp"
+
+                            android:textColor="@color/pink_red" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:id="@+id/locationPin"
+                    android:elevation="4dp"
+                    android:layout_width="70dp"
+                    android:layout_height="90dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/my_pin_pink"
+                    android:contentDescription="geo pin">
+                </ImageView>
+            </FrameLayout>
+
 
 
         </com.google.android.material.card.MaterialCardView>
@@ -89,23 +217,97 @@
             android:paddingBottom="20dp">
 
             <TextView
-                android:id="@+id/tvAddress"
-                android:layout_width="match_parent"
+                android:id="@+id/tvAddressPre"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:layout_gravity="center"
-                android:paddingBottom="25dp"
-                android:text="user address"
+                android:text="This is your new address"
+                android:fontFamily="@font/instagram_sans"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/dark_grey"
+                android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/tvAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:text="@string/new_address"
+                    android:fontFamily="@font/instagram_sans"
+                    android:textSize="15sp"
+                    android:textColor="@color/dark_grey"
+                    android:background="@color/quantum_googgreen100"
+                    android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tvRadius"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text=""
+                android:fontFamily="@font/instagram_sans"
+                android:layout_gravity="center"
+                android:paddingBottom="15dp"
                 android:textSize="15sp"
-                android:textColor="@color/dark_grey"/>
+                android:textColor="@color/dark_grey"
+                android:visibility="gone"/>
+
+            <LinearLayout
+                android:id="@+id/inputCircleRadius"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:visibility="gone">
+
+                <com.airbnb.lottie.LottieAnimationView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    map:lottie_rawRes="@raw/pulsing_circle_blue"
+                    map:lottie_loop="true"
+                    map:lottie_autoPlay="true"
+                    android:contentDescription="@string/circle_radius_kilometers" />
+
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/etRadiusInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/circle_radius_kilometers"
+                    android:layout_marginEnd="15dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etRadius"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:backgroundTint="@color/white"
+                        android:singleLine="true"
+                        android:fontFamily="@font/instagram_sans"
+                        android:inputType="numberDecimal"
+                        android:textColor="@color/dark_grey"
+                        android:textColorHint="#757575"
+                        tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/updateLocationBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:textColor="@color/white"
                 map:cornerRadius="15dp"
-                android:text="Update location">
+                android:enabled="false"
+                android:text="@string/update_location"
+                android:fontFamily="@font/instagram_sans">
             </com.google.android.material.button.MaterialButton>
 
 

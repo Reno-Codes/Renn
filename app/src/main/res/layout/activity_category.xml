@@ -25,7 +25,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:padding="15dp"
-                android:src="@drawable/ic_baseline_arrow_back_ios_24" />
+                android:src="@drawable/ic_baseline_arrow_back_ios_24"
+                android:contentDescription="@string/back_button" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -33,31 +34,27 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:padding="15dp"
-                android:src="@drawable/ic_white_search_24" />
+                android:src="@drawable/ic_white_search_24"
+                android:contentDescription="@string/search_icon" />
         </RelativeLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:text="Which category?"
-            android:textSize="25sp"
+            android:text="Choose category"
+            android:fontFamily="@font/instagram_sans"
+            android:textSize="20sp"
             android:textAllCaps="true"
-            android:padding="10dp"/>
+            android:padding="15dp"/>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            app:cardCornerRadius="20dp"
+            app:cardCornerRadius="15dp"
             app:cardElevation="8dp">
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#00000000"
-                android:contentDescription="@string/category_card"
-                android:textColor="@color/white" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -69,35 +66,40 @@
                     android:background="@drawable/category_gradient_3"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:layout_width="70dp"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/makeup"
-                        android:layout_marginLeft="20dp"
-                        android:contentDescription="Makeup Palette" />
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:gravity="right"
-                        android:paddingRight="30dp"
-                        android:paddingTop="20dp">
+                        android:gravity="center_vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Beauty"
                             android:textSize="20sp"
-                            android:textColor="@color/white" />
+                            android:paddingLeft="30dp"
+                            android:textColor="@color/dark_grey"
+                            android:fontFamily="@font/instagram_sans"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:alpha="0.6"
                             android:text="Schedule any beauty session"
-                            android:textSize="12sp"
-                            android:textColor="@color/description_color_white" />
+                            android:textColor="@color/dark_grey"
+                            android:textSize="14sp"
+                            android:paddingLeft="30dp"
+                            android:fontFamily="@font/instagram_sans"/>
                     </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="20dp"
+                        android:src="@drawable/makeup">
+
+                    </ImageView>
                 </LinearLayout>
 
             </RelativeLayout>
@@ -131,14 +133,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal"
-                    android:background="@drawable/category_gradient_1">
+                    android:background="@drawable/category_gradient_3">
 
-                    <ImageView
+                    <com.airbnb.lottie.LottieAnimationView
                         android:layout_width="70dp"
                         android:layout_height="match_parent"
-                        android:src="@drawable/transport"
                         android:layout_marginLeft="20dp"
-                        android:contentDescription="TODO" />
+                        app:lottie_rawRes="@raw/category_icon_beauty_2"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true">
+
+                    </com.airbnb.lottie.LottieAnimationView>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -196,12 +201,15 @@
                     android:orientation="horizontal"
                     android:background="@drawable/category_gradient_2">
 
-                    <ImageView
+                    <com.airbnb.lottie.LottieAnimationView
                         android:layout_width="70dp"
                         android:layout_height="match_parent"
-                        android:src="@drawable/wheelbarrow"
                         android:layout_marginLeft="20dp"
-                        android:contentDescription="TODO" />
+                        app:lottie_rawRes="@raw/category_icon_beauty_2"
+                        app:lottie_autoPlay="true"
+                        app:lottie_loop="true">
+
+                    </com.airbnb.lottie.LottieAnimationView>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -222,7 +230,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textSize="12sp"
-                            android:text="Get things built or fixed"
+                            android:text="Get things made, built or fixed"
                             android:textColor="@color/description_color_white" />
                     </LinearLayout>
                 </LinearLayout>

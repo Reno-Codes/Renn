@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color_grey"
+    android:background="@color/white"
     tools:context=".register_login.LoginActivity">
 
     <LinearLayout
@@ -26,38 +26,80 @@
             android:gravity="center_horizontal"
             android:layout_marginTop="25dp"
             android:text="@string/sign_in"
-            android:textColor="@color/white"
+            android:fontFamily="@font/instagram_sans"
+            android:textColor="@color/dark_grey"
             android:textSize="25sp" />
 
-        <EditText
-            android:id="@+id/etEmailAddress"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginRight="15dp"
-            android:autofillHints="emailAddress"
-            android:ems="10"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:minHeight="48dp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/description_color_white" />
+            android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/etPassword"
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:src="@drawable/ic_outline_email_24_grey"
+                android:contentDescription="@string/email" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/e_mail_address"
+                android:layout_marginEnd="15dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etEmailAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="#00FFFFFF"
+                    android:ems="10"
+                    android:inputType="textEmailAddress"
+                    android:singleLine="true"
+                    android:fontFamily="@font/instagram_sans"
+                    android:textColor="@color/dark_grey"
+                    android:textColorHint="#757575"
+                    tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="15dp"
-            android:autofillHints="password"
-            android:ems="10"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:minHeight="48dp"
-            android:textColor="@color/white"
-            android:textColorHint="@color/description_color_white" />
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="15dp"
+                android:src="@drawable/ic_outline_key_24_grey"
+                android:contentDescription="@string/password" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                android:layout_marginEnd="15dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:backgroundTint="#00FFFFFF"
+                    android:ems="10"
+                    android:inputType="textPassword"
+                    android:singleLine="true"
+                    android:fontFamily="@font/instagram_sans"
+                    android:textColor="@color/dark_grey"
+                    android:textColorHint="#757575"
+                    tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
 
         <Button
             android:id="@+id/btnLogin"
@@ -65,6 +107,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="15dp"
             android:text="@string/sign_in"
+            android:fontFamily="@font/instagram_sans"
             tools:ignore="TextContrastCheck,DuplicateSpeakableTextCheck" />
 
     <LinearLayout
@@ -78,7 +121,8 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="@string/don_t_have_an_account"
-            android:textColor="@color/white"
+            android:fontFamily="@font/instagram_sans"
+            android:textColor="@color/dark_grey"
             android:textSize="16sp" />
 
         <TextView
@@ -87,7 +131,8 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/sign_up"
-            android:textColor="@color/white"
+            android:fontFamily="@font/instagram_sans"
+            android:textColor="@color/dark_grey"
             android:textSize="16sp"
             android:textStyle="bold" />
     </LinearLayout>
@@ -96,7 +141,8 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
+            android:textColor="@color/dark_grey"
+            android:fontFamily="@font/instagram_sans"
             android:text="@string/or"
             android:gravity="center_horizontal"
             android:layout_marginTop="25dp"
